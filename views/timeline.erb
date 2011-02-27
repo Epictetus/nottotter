@@ -5,12 +5,12 @@
 </form>
 
 <% @timeline.each do |status| %>
-<img src="<%= status.user.profile_image_url %>" size=64></img>
+<img src="<%=h status.user.profile_image_url %>" size=64></img>
 <p>
-  <a href="http://twitter.com/#!/<%= status.user.screen_name %>">
-    <%= status.user.screen_name %> 
+  <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
+    <%=h status.user.screen_name %> 
   </a>
-  <%= status.user.name %>
+  <%=h status.user.name %>
 </p> 
-<p><%= status.text %></p>
+<p><%=h status.text %></p>
 <% end %>

@@ -1,7 +1,7 @@
 <form method="post" action=".">
   <% @users.each do |user| %>
-  <input type="radio" name="user_id" value="<%= user.user_id %>" />
-  <%= user.screen_name %>
+  <input type="radio" name="user_id" value="<%=h user.user_id %>" />
+  <%=h user.screen_name %>
   <br />
   <% end %>
   <input type="submit" value="hijack" />
