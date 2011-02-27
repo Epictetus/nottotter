@@ -21,12 +21,12 @@ module Model
       self.new_from_key('admin_user')
     end
 
-    def self.register(*data)
-      %w{screen_name access_key access_secret}.each{|key|
+    def self.register(data)
+      %w{screen_name access_token access_secret}.each{|key|
         raise "data must have #{key}" unless data.has_key? key.to_sym
       }
-      inserted = self.collection.save({:screen_name => data[:screen_name]}, data) # update by screenname
-      self.new_from_key(inserted['_id'])
+      self.collection.update({:screen_name => data[:screen_name]}, data, {:upsert => true}) # update by screenname
+      self.new_from_screen_name(data[:screen_name])
     end
 
     def initialize(data)        # private
@@ -40,19 +40,19 @@ module Model
     # --- instance method ---
 
     def key
-      @data['key']
+      @data['_id'].to_s
     end
 
     def screen_name
       @data['screen_name']
     end
 
-    def access_secret
-      @data['access_secret']
+    def access_token
+      @data['access_token']
     end
 
-    def access_key
-      @data['access_key']
+    def access_secret
+      @data['access_secret']
     end
 
     def rubytter                # returns rubytter instance
