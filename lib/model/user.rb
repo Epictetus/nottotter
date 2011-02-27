@@ -12,13 +12,13 @@ module Model
 
     def self.new_from_user_id(user_id)
       data = self.collection.find_one({:user_id => user_id})
-      raise 'no such user' unless data
+      return nil unless data
       self.new(data)
     end
 
     def self.new_from_screen_name(screen_name)
       data = self.collection.find_one({:screen_name => screen_name})
-      raise 'no such user' unless data
+      return nil unless data
       self.new(data)
     end
 
