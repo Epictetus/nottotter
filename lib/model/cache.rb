@@ -17,6 +17,9 @@ module Model
       expire = 3600 * 24 *rand
       self.instance.set(key, new_value, expire)
       new_value
+    rescue => error
+      Model.logger.warn error
+      new_value || yield
     end
   end
 end
