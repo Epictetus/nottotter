@@ -3,11 +3,20 @@
     <p>のっとったーは，新時代の乗っ取りサービスです．TwitterのOAuth認証を使って利用できます．</p>
   </div>
 
+  <% if current_user %>
+  <div id="nottori-user">
+    <p>下のボタンから，乗っ取りましょう．</p>
+    <form method="get" action="/nottori/">
+      <input type="submit" value="のっとる"></input>
+    </form>
+  </div>
+  <% else %>
   <div id="register-user">
     <form method="get" action="/oauth">
       <input type="submit" value="認証する"></input>
     </form>
   </div>
+  <% end %>
 </div>
 <div class="grid_3">
   <script src="http://widgets.twimg.com/j/2/widget.js"></script>
