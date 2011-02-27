@@ -1,4 +1,50 @@
+body {
+    font: 13px/1.5 serif;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font-style: italic;
+}
+
+h1 a {
+    color: #000;
+}
+
 #footer {
     margin-top: 5em;
     text-align: center;
 }
+
+#contain-all {
+    padding-top: 2em;
+}
+
+
+/* table select user */
+.profile-image {
+    vertical-align: middle;
+}
+table.select-user .user:hover {
+    background: #fafaff;
+}
+table.select-user .user {
+    border-top: 1px solid #fafafa;
+}
+
+
+
+
+
+
+
+
+
