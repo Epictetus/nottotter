@@ -1,9 +1,47 @@
-<div id="description">
-  <p>のっとったーは，新時代の乗っ取りサービスです．TwitterのOAuth認証を使って利用できます．</p>
-</div>
+<div class="grid_9">
+  <div id="description">
+    <p>のっとったーは，新時代の乗っ取りサービスです．TwitterのOAuth認証を使って利用できます．</p>
+  </div>
 
-<div id="register-user">
-  <form method="get" action="/oauth">
-    <input type="submit" value="認証する"></input>
-  </form>
+  <div id="register-user">
+    <form method="get" action="/oauth">
+      <input type="submit" value="認証する"></input>
+    </form>
+  </div>
+</div>
+<div class="grid_3">
+  <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+  <script>
+    new TWTR.Widget({
+      version: 2,
+      type: 'search',
+      search: '#followmeJP',
+      interval: 6000,
+      title: '',
+      subject: 'nottotter',
+      width: 250,
+      height: 240,
+      theme: {
+        shell: {
+          background: '#8ec1da',
+          color: '#ffffff'
+        },
+        tweets: {
+          background: '#ffffff',
+          color: '#444444',
+          links: '#1985b5'
+        }
+      },
+      features: {
+        scrollbar: false,
+        loop: true,
+        live: true,
+        hashtags: true,
+        timestamp: true,
+        avatars: true,
+        toptweets: true,
+        behavior: 'default'
+      }
+    }).render().start();
+  </script>
 </div>
