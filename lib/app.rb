@@ -7,6 +7,8 @@ class NottotterApp < Sinatra::Base
     @logger ||= Logger.new($stdout)
   end
 
+  use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
+
   get '/' do
     erb :index
   end
