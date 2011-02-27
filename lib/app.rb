@@ -12,14 +12,14 @@ class NottotterApp < Sinatra::Base
   end
 
   get '/oauth' do
-    request_token = Model::Oauth.get_request_token()
+    request_token = Model::Twitter.get_request_token()
     session[:request_token] = request_token.token
     session[:request_secret] = request_token.secret
     redirect request_token.authorize_url
   end
 
   get '/callback' do
-    request_token = Model::Oauth.request_token(
+    request_token = Model::Twitter.request_token(
       session[:request_token],
       session[:request_secret]
       )

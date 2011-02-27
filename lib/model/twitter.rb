@@ -1,7 +1,7 @@
 require 'oauth'
 
 module Model
-  class Oauth
+  class Twitter
     CONSUMER_KEY, CONSUMER_SECRET = open(File.expand_path("~/.nottotter_token")).read.split("\n")
 
     def self.consumer
