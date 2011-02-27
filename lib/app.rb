@@ -35,6 +35,8 @@ class NottotterApp < Sinatra::Base
         :access_secret => access_token.params[:oauth_token_secret],
         :screen_name => access_token.params[:screen_name]
       })
+    
+    session[:user_id] = access_token.params[:user_id]
     redirect '/nottori/'
   end
   
@@ -44,7 +46,14 @@ class NottotterApp < Sinatra::Base
   end
 
   post "/nottori/" do
-    "post nottori"
+    to_user = Model::User.new_from_user_id(params[:user_id])
+    from_user = Model::User.new_from_user_id(session[:user_id])
+    Model::Hijack.create({
+        :from_user => from_user,
+        :to_user => to_user
+      })
+    
+    redirect '/timeline'
   end
 
   get "/nottori/:user" do
