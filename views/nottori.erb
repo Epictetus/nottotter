@@ -1,6 +1,6 @@
 <form method="post" action=".">
   <% @users.each do |user| %>
-  <input type="radio" name="user" value="user.user_id" />
+  <input type="radio" name="user_id" value="<%= user.user_id %>" />
   <%= user.screen_name %>
   <br />
   <% end %>
