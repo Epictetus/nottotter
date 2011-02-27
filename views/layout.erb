@@ -11,6 +11,12 @@
   <body>
     <div id="contain_all" class="container_12">
       <h1>nottotter</h1>
+      <% if current_user %>
+      <p>
+        hello, <%=h current_user.screen_name %>
+        <a href="/logout">logout</a>
+      </p>
+      <% end %>
       <%= yield %>
 
       <div class="clear"></div>

@@ -7,6 +7,24 @@ class NottotterApp < Sinatra::Base
     @logger ||= Logger.new($stdout)
   end
 
+  helpers do
+    alias_method :h, :escape_html
+
+    def current_user
+      return unless session[:user_id]
+      return @current_user if defined? @current_user
+
+      begin
+        @current_user = Model::User.new_from_user_id(session[:user_id])
+        return @current_user
+      rescue => error
+        p error
+        session.delete[:user_id]
+        return nil
+      end
+    end
+  end
+
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
 
   get '/' do
@@ -39,9 +57,16 @@ class NottotterApp < Sinatra::Base
       })
     
     session[:user_id] = access_token.params[:user_id]
+    session.delete(:request_token)
+    session.delete(:request_secret)
     redirect '/nottori/'
   end
-  
+
+  get '/logout' do
+    session.delete(:user_id)
+    redirect '/'
+  end
+
   get "/nottori/" do
     @users = Model::User.all
     erb :nottori
