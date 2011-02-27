@@ -10,18 +10,26 @@ class NottotterApp < Sinatra::Base
   helpers do
     alias_method :h, :escape_html
 
+    def require_user
+      current_user or redirect '/'
+    end
+
+    def require_hijack
+      current_hijack or redirect '/'
+    end
+
     def current_user
       return unless session[:user_id]
       return @current_user if defined? @current_user
 
-      begin
-        @current_user = Model::User.new_from_user_id(session[:user_id])
-        return @current_user
-      rescue => error
-        p error
-        session.delete[:user_id]
-        return nil
-      end
+      @current_user = Model::User.new_from_user_id(session[:user_id])
+    end
+
+    def current_hijack
+      return unless current_user
+      return @current_hijack if defined? @current_hijack
+
+      @current_hijack = Model::Hijack.new_from_user(current_user)
     end
   end
 
@@ -68,11 +76,13 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/nottori/" do
+    require_user
     @users = Model::User.all
     erb :nottori
   end
 
   post "/nottori/" do
+    require_user
     to_user = Model::User.new_from_user_id(params[:user_id])
     from_user = Model::User.new_from_user_id(session[:user_id])
     Model::Hijack.create({
@@ -83,10 +93,12 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/nottori/:user" do
+    require_user
     "nottori #{params[:user]}"
   end
 
   get "/timeline" do
+    require_hijack
     p session[:user_id]
     user = Model::User.new_from_user_id(session[:user_id])
     @hijack = Model::Hijack.new_from_user(user)
