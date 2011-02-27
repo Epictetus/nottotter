@@ -93,8 +93,13 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/nottori/:user" do
-    require_user
-    "nottori #{params[:user]}"
+    to_user = Model::User.new_from_screen_name[params[:user]]
+    unless to_user
+      @not_found_to_user = params[:user]
+      erb :nottori_not_found
+    end
+    @users = [to_user]
+    erb :nottori
   end
 
   get "/timeline" do
