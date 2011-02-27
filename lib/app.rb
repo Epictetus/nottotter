@@ -108,6 +108,8 @@ class NottotterApp < Sinatra::Base
     @hijack = Model::Hijack.new_from_user(user)
     @to_user = @hijack.to_user.rubytter
     @timeline = @to_user.friends_timeline
+    @reply_id = params[:reply_id] 
+    @reply_user = params[:reply_user]
     erb :timeline
   end
   
@@ -115,7 +117,13 @@ class NottotterApp < Sinatra::Base
     require_hijack
     user = Model::User.new_from_user_id(session[:user_id])
     @hijack = Model::Hijack.new_from_user(user)
-    @hijack.to_user.rubytter.update(params[:tweet])
+    if params[:reply_id]
+      @hijack.to_user.rubytter.update(
+        params[:tweet],
+        {:in_reply_to_status_id => params[:reply_id]})
+    else
+      @hijack.to_user.rubytter.update(params[:tweet])
+    end
     redirect '/timeline'
   end
 
