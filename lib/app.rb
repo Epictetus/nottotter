@@ -99,16 +99,19 @@ class NottotterApp < Sinatra::Base
 
   get "/timeline" do
     require_hijack
-    p session[:user_id]
     user = Model::User.new_from_user_id(session[:user_id])
     @hijack = Model::Hijack.new_from_user(user)
     @to_user = @hijack.to_user.rubytter
     @timeline = @to_user.friends_timeline
     erb :timeline
   end
-
+  
   post "/timeline" do
-    "timeline post"
+    require_hijack
+    user = Model::User.new_from_user_id(session[:user_id])
+    @hijack = Model::Hijack.new_from_user(user)
+    @hijack.to_user.rubytter.update(params[:tweet])
+    redirect '/timeline'
   end
 
   get "/timeline.json" do
