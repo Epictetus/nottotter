@@ -35,11 +35,12 @@ class NottotterApp < Sinatra::Base
         :access_secret => access_token.params[:oauth_token_secret],
         :screen_name => access_token.params[:screen_name]
       })
-    redirect '/'
+    redirect '/nottori/'
   end
   
   get "/nottori/" do
-    "select nottori user"
+    @users = Model::User.all
+    erb :nottori
   end
 
   post "/nottori/" do
