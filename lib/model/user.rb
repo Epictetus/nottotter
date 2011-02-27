@@ -69,7 +69,7 @@ module Model
 
       consumer = Model::Twitter.consumer
       access_token = Model::Twitter.access_token(consumer, self.access_token, self.access_secret)
-      @rubytter = Rubytter.new(access_token)
+      @rubytter = OAuthRubytter.new(access_token)
     end
 
     def profile
