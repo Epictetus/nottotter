@@ -1,1 +1,9 @@
-nototter
+= nottotter
+
+== 開発
+
+gem shotgunをインストールして，
+
+    shotgun config.ru
+
+で開発サーバーが起動，localhost:9393にアクセスきます．．．
