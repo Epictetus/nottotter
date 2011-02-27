@@ -4,29 +4,28 @@ module Model
   class User
     # --- class method ---
 
+    def self.new_from_user_id(user_id)
+      data = self.collection.find_one({:user_id => user_id})
+      raise 'no such user' unless data
+      self.new(data)
+    end
+
     def self.new_from_screen_name(screen_name)
       data = self.collection.find_one({:screen_name => screen_name})
       raise 'no such user' unless data
       self.new(data)
     end
 
-    def self.new_from_key(key)
-      key = BSON::ObjectId.from_string(key)
-      data = self.collection.find_one({:_id => key})
-      raise 'no such user' unless data
-      self.new(data)
-    end
-
     def self.admin_user              # returns nottotterJP
-      self.new_from_key('admin_user')
+      self.new_from_screen_name('admin_user')
     end
 
     def self.register(data)
-      %w{screen_name access_token access_secret}.map(&:to_sym).each{|key|
+      %w{screen_name user_id access_token access_secret}.map(&:to_sym).each{|key|
         raise "data must have #{key}" unless data.has_key? key
       }
-      self.collection.update({:screen_name => data[:screen_name]}, data, {:upsert => true}) # update by screenname
-      self.new_from_screen_name(data[:screen_name])
+      self.collection.update({:user_id => data[:user_id]}, data, {:upsert => true}) # update by user id
+      self.new_from_user_id(data[:user_id])
     end
 
     def initialize(data)        # private
@@ -41,6 +40,10 @@ module Model
 
     def key
       @data['_id'].to_s
+    end
+
+    def user_id
+      @data['user_id']
     end
 
     def screen_name
@@ -69,7 +72,7 @@ module Model
 
     def profile
       # TODO: use memcached
-      @profile ||= self.rubytter.user(self.screen_name)
+      @profile ||= self.rubytter.user(self.user_id)
     end
   end
 end

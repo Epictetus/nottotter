@@ -7,7 +7,7 @@ module Model
 
     def self.new_from_user(user) # user is from user
       raise "#user must be kind of Model::User" unless user.kind_of? Model::User
-      found = self.collection.find_one({:from_screen_name => user.screen_name, :finish_on => {'$gt' => Time.now}})
+      found = self.collection.find_one({:from_user_id => user.user_id, :finish_on => {'$gt' => Time.now}})
       return unless found
       return self.new(found)
     end
@@ -21,13 +21,13 @@ module Model
       from_user = data[:from_user]
       to_user = data[:to_user]
 
-      p self.collection.update({
-          :from_screen_name => from_user.screen_name,
+      self.collection.update({
+          :from_user_id => from_user.user_id,
           :finish_on => {'$gt' => Time.now},
         },
         {
-          :from_screen_name => from_user.screen_name,
-          :to_screen_name => to_user.screen_name,
+          :from_user_id => from_user.user_id,
+          :to_user_id => to_user.user_id,
           :start_on => Time.now,
           :finish_on => Time.now + EXPIRE,
         },
@@ -51,11 +51,11 @@ module Model
     end
 
     def from_user
-      Model::User.new_from_screen_name(@data['from_screen_name'])
+      Model::User.new_from_user_id(@data['from_user_id'])
     end
 
     def to_user
-      Model::User.new_from_screen_name(@data['to_screen_name'])
+      Model::User.new_from_user_id(@data['to_user_id'])
     end
 
     def start_on

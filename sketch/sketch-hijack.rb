@@ -3,8 +3,8 @@ require 'model'
 require 'pp'
 
 warn 'register 2 user'
-from_user = Model::User.register({:screen_name => 'from_user' + rand.to_s, :access_token => 'at' + rand.to_s, :access_secret => 'as' + rand.to_s})
-to_user = Model::User.register({:screen_name => 'to_user' + rand.to_s, :access_token => 'at' + rand.to_s, :access_secret => 'as' + rand.to_s})
+from_user = Model::User.register({:screen_name => 'from_user' + rand.to_s, :user_id => rand.to_s, :access_token => 'at' + rand.to_s, :access_secret => 'as' + rand.to_s})
+to_user = Model::User.register({:screen_name => 'to_user' + rand.to_s, :user_id => rand.to_s, :access_token => 'at' + rand.to_s, :access_secret => 'as' + rand.to_s})
 
 warn 'create hijack'
 hijack1 = Model::Hijack.create({:from_user => from_user, :to_user => to_user})
