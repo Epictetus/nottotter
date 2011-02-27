@@ -1,6 +1,6 @@
 <div class="grid_9">
   <div id="description">
-    <p>のっとったーは，新時代の乗っ取りサービスです．TwitterのOAuth認証を使って利用できます．</p>
+    <h2>のっとったーは，新時代の乗っ取りサービスです．<br>のっとったーを利用して，友達のTwitterアカウントを乗っ取ったり，知らない人にアカウントを乗っ取られたりしましょう．</h2>
   </div>
 
   <% if current_user %>
@@ -13,6 +13,7 @@
   <% else %>
   <div id="register-user">
     <form method="get" action="/oauth">
+      <p>Twitter OAuthで認証して利用します．</p>
       <input type="submit" value="認証する"></input>
     </form>
   </div>

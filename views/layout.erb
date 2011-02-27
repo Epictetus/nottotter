@@ -6,17 +6,21 @@
     <link rel="stylesheet" type="text/css" media="all" href="/css/text.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/css/960.css" />
     <link rel="stylesheet" type="text/css" media="all" href="/css/nottotter.css" />
-    <title>nottotter</title>
+    <title>のっとったー</title>
   </head>
   <body>
-    <div id="contain_all" class="container_12">
-      <h1>nottotter</h1>
+    <div id="contain-all" class="container_12">
+      <h1 class="grid_8"><a href="/">のっとったー</a></h1>
       <% if current_user %>
-      <p>
-        hello, <%=h current_user.screen_name %>
-        <a href="/logout">logout</a>
-      </p>
+      <div class="grid_4">
+        <p>
+          <%=h current_user.screen_name %>さんこんにちは，
+          <a href="/logout">ログアウト</a>
+          しますか？
+        </p>
+      </div>
       <% end %>
+      <div class="clear"></div>
       <%= yield %>
 
       <div class="clear"></div>
