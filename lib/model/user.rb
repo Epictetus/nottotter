@@ -1,4 +1,4 @@
-require 'oauth'
+require 'rubytter'
 
 module Model
   class User
@@ -66,21 +66,21 @@ module Model
 
     def rubytter                # returns rubytter instance
       return @rubytter if @rubytter
-      consumer ||= OAuth::Consumer.new(
-        CONSUMER_KEY,
-        CONSUMER_SECRET,
-        :site => 'http://api.twitter.com',
-        )
 
-      access_token = OAuth::AccessToken.new(consumer, self.access_token, self.access_secret)
+      consumer = Model::Twitter.consumer
+      access_token = Model::Twitter.access_token(consumer, self.access_token, self.access_secret)
       @rubytter = Rubytter.new(access_token)
     end
 
     def profile
       # TODO: use memcached
-      @profile ||= self.rubytter.user(self.user_id)
+      @profile ||= self.rubytter.user(self.screen_name)
+      require 'pp'
+      pp @profile
+      @profile
+    rescue => error
+      p self
+      p error
     end
-
-    CONSUMER_KEY, CONSUMER_SECRET = open(File.expand_path("~/.nottotter_token")).read.split("\n")
   end
 end
