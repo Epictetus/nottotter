@@ -54,7 +54,6 @@ class NottotterApp < Sinatra::Base
         :from_user => from_user,
         :to_user => to_user
       })
-    
     redirect '/timeline'
   end
 
@@ -63,7 +62,12 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/timeline" do
-    "timeline"
+    p session[:user_id]
+    user = Model::User.new_from_user_id(session[:user_id])
+    @hijack = Model::Hijack.new_from_user(user)
+    @to_user = @hijack.to_user.rubytter
+    @timeline = @to_user.friends_timeline
+    erb :timeline
   end
 
   post "/timeline" do
