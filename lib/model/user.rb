@@ -74,5 +74,7 @@ module Model
       # TODO: use memcached
       @profile ||= self.rubytter.user(self.user_id)
     end
+
+    CONSUMER_KEY, CONSUMER_SECRET = open(File.expand_path("~/.nottotter_token")).read.split("\n")
   end
 end
