@@ -4,6 +4,12 @@ module Model
   class User
     # --- class method ---
 
+    def self.all
+      self.collection.find.map{|user|
+        self.new(user)
+      }
+    end
+
     def self.new_from_user_id(user_id)
       data = self.collection.find_one({:user_id => user_id})
       raise 'no such user' unless data

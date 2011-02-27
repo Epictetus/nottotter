@@ -19,3 +19,6 @@ pp Model::User.new_from_screen_name(user_name)
 
 warn 'new_from_user_id'
 pp Model::User.new_from_user_id(user_id)
+
+warn 'all users'
+pp Model::User.all
