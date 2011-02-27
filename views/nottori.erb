@@ -1,8 +1,22 @@
-<form method="post" action=".">
+<p>のっとるユーザーを選んでください．</p>
+<table>
   <% @users.each do |user| %>
-  <input type="radio" name="user_id" value="<%= user.user_id %>" />
-  <%= user.screen_name %>
-  <br />
+  <tr>
+    <td>
+      <img src="<%=h user.profile_image_url %>" title="<%=h user.screen_name %>">
+    </td>
+    <td>
+      <strong><%=h user.screen_name %></strong> <%=h user.profile_name %>
+      <br>
+      <%=h user.profile_description %>
+    </td>
+    <td>
+      <form method="post" action=".">
+        <input type="hidden" name="user_id" value="<%= user.user_id %>" />
+        <input type="submit" value="のっとる" />
+      </form>
+    </td>
+  </tr>
   <% end %>
-  <input type="submit" value="hijack" />
-</form>
+</table>
+

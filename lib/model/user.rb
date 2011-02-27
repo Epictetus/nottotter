@@ -73,14 +73,24 @@ module Model
     end
 
     def profile
-      # TODO: use memcached
-      @profile ||= self.rubytter.user(self.screen_name)
-      require 'pp'
-      pp @profile
-      @profile
-    rescue => error
-      p self
-      p error
+      @profile ||= Model::Cache.get_or_set("profile-#{self.user_id}") {
+        Model.logger.info "get user profile #{self.screen_name}"
+        self.rubytter.user(self.screen_name).to_hash
+      }
+    end
+
+
+    # --- profile ---
+    def profile_image_url
+      self.profile[:profile_image_url]
+    end
+
+    def profile_name
+      self.profile[:name]
+    end
+
+    def profile_description
+      self.profile[:description]
     end
   end
 end
