@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'erb'
+require 'model'
 
 class NottotterApp < Sinatra::Base
   def self.logger
