@@ -22,8 +22,8 @@ module Model
     end
 
     def self.register(data)
-      %w{screen_name access_token access_secret}.each{|key|
-        raise "data must have #{key}" unless data.has_key? key.to_sym
+      %w{screen_name access_token access_secret}.map(&:to_sym).each{|key|
+        raise "data must have #{key}" unless data.has_key? key
       }
       self.collection.update({:screen_name => data[:screen_name]}, data, {:upsert => true}) # update by screenname
       self.new_from_screen_name(data[:screen_name])
