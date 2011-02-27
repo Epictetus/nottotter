@@ -1,9 +1,11 @@
-<p>のっとるユーザーを選んでください．</p>
-<table>
+<% if @users.length > 1 %>
+  <p>のっとるユーザーを選んでください．</p>
+<% end %>
+<table class="select-user">
   <% @users.each do |user| %>
-  <tr>
+  <tr class="user">
     <td>
-      <img src="<%=h user.profile_image_url %>" title="<%=h user.screen_name %>">
+      <img class="profile-image" src="<%=h user.profile_image_url %>" title="<%=h user.screen_name %>">
     </td>
     <td>
       <strong><%=h user.screen_name %></strong> <%=h user.profile_name %>

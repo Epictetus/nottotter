@@ -2,3 +2,23 @@
     margin-top: 5em;
     text-align: center;
 }
+
+
+/* table select user */
+.profile-image {
+    vertical-align: middle;
+}
+table.select-user .user:hover {
+    background: #fafaff;
+}
+table.select-user .user {
+    border-top: 1px solid #fafafa;
+}
+
+
+
+
+
+
+
+
