@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'sinatra'
 require 'erb'
 require 'model'
@@ -97,6 +98,12 @@ class NottotterApp < Sinatra::Base
         :from_user => from_user,
         :to_user => to_user
       })
+
+    begin
+      to_user.rubytter.update("#{from_user.screen_name}さんがのっとったー #nottotterJP")
+    rescue
+    end
+    
     redirect '/timeline'
   end
 
