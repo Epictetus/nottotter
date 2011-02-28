@@ -31,6 +31,14 @@ class NottotterApp < Sinatra::Base
 
       @current_hijack = Model::Hijack.new_from_user(current_user)
     end
+
+    def current_hijacked_user
+      return unless current_hijack
+      return @current_hijacked_user if defined? @current_hijacked_user
+
+      @current_hijacked_user = current_hijack.to_user
+    end
+
   end
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
@@ -104,11 +112,8 @@ class NottotterApp < Sinatra::Base
 
   get "/timeline" do
     require_hijack
-    user = Model::User.new_from_user_id(session[:user_id])
-    @hijack = Model::Hijack.new_from_user(user)
-    @to_user = @hijack.to_user.rubytter
-    @timeline = @to_user.friends_timeline
-    @reply_id = params[:reply_id] 
+    @timeline = current_hijacked_user.timeline
+    @reply_id = params[:reply_id]
     @reply_user = params[:reply_user]
     erb :timeline
   end

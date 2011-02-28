@@ -110,5 +110,16 @@ module Model
         self.rubytter.friends_ids(self.user_id)
       }
     end
+
+    def timeline
+      return @timeline if @timeline
+      @timeline ||= Model::Cache.get_or_set("timeline-#{self.user_id}", 30) {
+        Model.logger.info "get timeline #{self.screen_name}"
+        self.rubytter.friends_timeline.map{|status| status.to_hash}
+      }.map{|status|
+        Model::ActiveRubytter.new(status)
+      }
+    end
+
   end
 end

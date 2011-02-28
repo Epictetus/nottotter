@@ -3,6 +3,7 @@ require 'model/cache'
 require 'model/user'
 require 'model/hijack'
 require 'model/twitter'
+require 'model/active_rubytter'
 require 'logger'
 
 module Model
