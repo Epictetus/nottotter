@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'rubytter'
 
 module Model
@@ -8,6 +9,16 @@ module Model
       self.collection.find.map{|user|
         self.new(user)
       }
+    end
+
+    def self.recommends(from_user)
+      # 毎回変える，先頭に知ってる人
+      self.all.delete_if {|user|
+        user.user_id == from_user.user_id
+      }.sort_by{|user|
+        score = rand
+        score += 1 if from_user.friends_ids.include? user.user_id
+      }.reverse
     end
 
     def self.new_from_user_id(user_id)
@@ -91,6 +102,13 @@ module Model
 
     def profile_description
       self.profile[:description]
+    end
+
+    def friends_ids
+      @friends_ids ||= Model::Cache.get_or_set("friend_ids-#{self.user_id}", 3600) { # 同時に動かないから固定，friend増える可能性あるので少し短かめ
+        Model.logger.info "get friend ids #{self.screen_name}"
+        self.rubytter.friends_ids(self.user_id)
+      }
     end
   end
 end
