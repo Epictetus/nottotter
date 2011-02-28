@@ -8,7 +8,7 @@ module Model
       OAuth::Consumer.new(
         CONSUMER_KEY,
         CONSUMER_SECRET,
-        :site => 'http://api.twitter.com',
+        :site => 'http://api.twitter.com'
         )
     end
     
@@ -16,20 +16,23 @@ module Model
       OAuth::AccessToken.new(
         consumer, 
         token,
-        secret)
+        secret
+        )
     end
     
     def self.request_token(token, secret)
       request_token = OAuth::RequestToken.new(
         self.consumer,
         token,
-        secret)
+        secret
+        )
     end
 
     def self.get_request_token
       self.consumer.get_request_token(
         :oauth_callback =>
-        "http://localhost:9393/callback")
+        "http://localhost:9393/callback"
+        )
     end
   end
 end
