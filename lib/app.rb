@@ -77,7 +77,7 @@ class NottotterApp < Sinatra::Base
 
   get "/nottori/" do
     require_user
-    @users = Model::User.all
+    @users = Model::User.recommends(current_user)
     erb :nottori
   end
 
