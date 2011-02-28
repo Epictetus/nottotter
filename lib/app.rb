@@ -17,7 +17,16 @@ class NottotterApp < Sinatra::Base
     end
 
     def require_hijack
-      current_hijack or redirect '/'
+      return if current_hijack
+      expired_hijack = Model::Hijack.new_from_user(current_user, {'$lt' => Time.now})
+      p expired_hijack.finish_on
+      begin
+        expired_hijack.to_user.rubytter.update("@#{expired_hijack.from_user.screen_name} さんののっとりが終了しました. \
+(#{expired_hijack.finish_on.localtime.strftime("%H時%M分")}) #nottotterJP")
+      rescue => error
+        NottotterApp.logger.warn error
+      end
+      redirect '/timeout'
     end
 
     def current_user
@@ -87,6 +96,10 @@ class NottotterApp < Sinatra::Base
     redirect '/'
   end
 
+  get '/timeout' do
+    erb :timeout
+  end
+
   get "/nottori/" do
     require_user
     @users = Model::User.recommends(current_user)
@@ -107,7 +120,7 @@ class NottotterApp < Sinatra::Base
 =begin
       to_user.rubytter.send_direct_message({
       :user => to_user.user_id,
-      :text => "@#{hijack_screen_name}さんにあなたのアカウントがのっとられました。 こちらのURLよりのっとりかえせます。 http://nottotter.com/nottori/#{hijack_screen_name}"
+      :text => "@#{hijack_screen_name}さんにあなたのアカウントがのっとられました. こちらのURLよりのっとりかえせます. http://nottotter.com/nottori/#{hijack_screen_name}"
     })
 =end
       to_user.rubytter.update(

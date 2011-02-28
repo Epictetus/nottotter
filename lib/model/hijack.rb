@@ -5,9 +5,9 @@ module Model
     EXPIRE = 60 * 5             # 5 minutes
     # --- class method ---
 
-    def self.new_from_user(user) # user is from user
+    def self.new_from_user(user, time = {'$gt' => Time.now}) # user is from user
       raise "#user must be kind of Model::User" unless user.kind_of? Model::User
-      found = self.collection.find_one({:from_user_id => user.user_id, :finish_on => {'$gt' => Time.now}})
+      found = self.collection.find_one({:from_user_id => user.user_id, :finish_on => time})
       return unless found
       return self.new(found)
     end
