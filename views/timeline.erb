@@ -1,8 +1,8 @@
 <form method="post" action="timeline">
-  <% if @reply_id %>
-  <input type="hidden" name="reply_id" value=<%=h @reply_id %> />
+  <% if params[:reply_id] %>
+  <input type="hidden" name="reply_id" value=<%=h params[:reply_id] %> />
   <% end %>
-  <textarea name="tweet" cols="50" rows="3"><%=h "@#{@reply_user} " if @reply_user %></textarea>
+  <textarea name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
   <br />
   <input type="submit" value="tweet" />
 </form>

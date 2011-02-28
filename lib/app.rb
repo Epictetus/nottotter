@@ -103,7 +103,8 @@ class NottotterApp < Sinatra::Base
 
     begin
       to_user.rubytter.update("#{from_user.screen_name}さんがのっとったー #nottotterJP")
-    rescue
+    rescue => error
+      NottotterApp.logger.warn error
     end
     
     redirect '/timeline'
@@ -122,8 +123,6 @@ class NottotterApp < Sinatra::Base
   get "/timeline" do
     require_hijack
     @timeline = current_hijacked_user.timeline
-    @reply_id = params[:reply_id]
-    @reply_user = params[:reply_user]
     erb :timeline
   end
   
