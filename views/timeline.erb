@@ -6,6 +6,7 @@
   <br />
   <input type="submit" value="tweet" />
 </form>
+<p><%=h flash[:tweet_error] %></p>
 
 <% @timeline.each do |status| %>
 <img src="<%=h status.user.profile_image_url %>" size=64></img>

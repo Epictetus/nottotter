@@ -2,6 +2,7 @@
 require 'sinatra'
 require 'erb'
 require 'model'
+require 'rack/flash'
 
 class NottotterApp < Sinatra::Base
   def self.logger
@@ -43,6 +44,7 @@ class NottotterApp < Sinatra::Base
   end
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
+  use Rack::Flash
 
   get '/' do
     erb :index
@@ -138,7 +140,9 @@ class NottotterApp < Sinatra::Base
         params[:tweet],
         tweet_params
         )
-    rescue
+    rescue => error
+      flash[:tweet_error] = "投稿に失敗しました。"
+      NottotterApp.logger.warn error
     end
     redirect '/timeline'
   end
