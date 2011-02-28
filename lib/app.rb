@@ -47,6 +47,7 @@ class NottotterApp < Sinatra::Base
   use Rack::Flash
 
   get '/' do
+    redirect '/timeline' if current_hijack
     erb :index
   end
 
