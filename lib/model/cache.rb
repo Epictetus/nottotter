@@ -1,11 +1,11 @@
-gem 'memcache-client'
-require 'memcache'
-MemCache.new('localhost:11211').stats
+gem 'dalli'
+require 'dalli'
+Dalli::Client.new('127.0.0.1:11211').stats
 
 module Model
   module Cache
     def self.instance
-      MemCache.new('localhost:11211')
+      Dalli::Client.new('127.0.0.1:11211')
     end
 
     def self.get_or_set(key, expire = 3600 * 24 *rand)
