@@ -55,11 +55,21 @@ table.select-user .user {
     border-top: 1px solid #fafafa;
 }
 
+div.hijack-item {
+    margin: 10px;
+}
 
+div.tweet-item {
+    margin: 10px;
+}
 
+.tweet-icon {
+    float: left;
+    height: 48px;
+    width: 48px;
+    margin: 10px;
+}
 
-
-
-
-
-
+.tweet-content {
+    height: 64px;
+}

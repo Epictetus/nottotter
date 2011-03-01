@@ -1,0 +1,25 @@
+<div class="tweet-item">
+  <img class="tweet-icon" src="<%=h status.user.profile_image_url %>" />
+  <div class="tweet-name">
+    <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
+      <%=h status.user.screen_name %> 
+    </a>
+    <%=h status.user.name %>
+  </div>
+  <div class="tweet-text">
+    <%=tweet_filter status.text %>
+  </div>
+  
+  <% if mode == :timeline %>
+  <a href="timeline?reply_id=<%=h status.id%>&reply_user=<%=h status.user.screen_name %>">
+    reply
+  </a>
+  <% elsif mode == :history and current_user and current_user.can_delete_status(status.id_str) %>
+  <form method="post" action="/delete" class="inline">
+    <input type="hidden" name="id" value="<%=h status.id_str %>">
+    <input type="hidden" name="location" value="/history">
+    <input type="submit" value="delete">
+  </form>
+  <% end %>
+  <hr />
+</div>

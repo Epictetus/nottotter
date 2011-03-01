@@ -1,22 +1,13 @@
-<% @history.each do |hijack| %>
-<div class="hijack-item">
-  <div><%=h hijack.start_on %> <%=h hijack.from_user.screen_name %>→<%=h hijack.to_user.screen_name %></div>
-  <% hijack.tweets.each do |status| %>
-  <% next if status.deleted %>
-  <div class="tweet-item">
-    <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
-      <%=h status.user.screen_name %>
-    </a>
-    : <%=tweet_filter status.text %>
-
-    <% if current_user and current_user.can_delete_status(status.id_str) %>
-    <form method="post" action="/delete" class="inline">
-      <input type="hidden" name="id" value="<%=h status.id_str %>">
-      <input type="hidden" name="location" value="/history">
-      <input type="submit" value="delete">
-    </form>
+<div class="grid_8">
+  <%= tweet_style_tag %>
+  <% @history.each do |hijack| %>
+  <div class="hijack-item">
+    <div><%=h hijack.start_on %> <%=h hijack.from_user.screen_name %>→<%=h hijack.to_user.screen_name %></div>
+    <% hijack.tweets.each do |status| %>
+    <% next if status.deleted %>
+    <%= tweet_tag status, :history %>
     <% end %>
+    <hr />
   </div>
   <% end %>
 </div>
-<% end %>

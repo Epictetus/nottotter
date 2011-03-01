@@ -22,6 +22,14 @@ class NottotterApp < Sinatra::Base
       }
     end
     
+    def tweet_tag(status, mode = :timeline)
+      erb :tweet, :locals => { 
+        :status => status, 
+        :mode => mode,
+        :current_user => current_user 
+      }
+    end
+    
     def bg_user
       @bg_user = (@bg_user and defined? @bg_user)? @bg_user : Model::User.admin_user
     end
