@@ -202,9 +202,10 @@ module Model
       return @refreshed if @refreshed
       @refreshed ||= Model::Cache.force_set(
         "timeline-#{self.user_id}",
-        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash},
-          30
-        ))
+        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash}
+          ),
+        30
+        )
     end
 
     # --- relations ---
