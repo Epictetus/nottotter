@@ -10,15 +10,18 @@
     <%=tweet_filter status.text %>
   </div>
   
-  <% if mode == :timeline %>
-  <a href="timeline?reply_id=<%=h status.id%>&reply_user=<%=h status.user.screen_name %>">
-    reply
-  </a>
-  <% elsif mode == :history and current_user and current_user.can_delete_status(status.id_str) %>
+  <% if opt[:reply] %>
+  <form method="get" action="/timeline" calss="inline">
+    <input type="hidden" name="reply_id" value="<%=h status.id_str %>" />
+    <input type="hidden" name="reply_user" value="<%=h status.user.screen_name %>" />
+    <input type="submit" value="reply" />
+  </form>
+  <% end %>
+  <% if opt[:delete] and current_user and current_user.can_delete_status(status.id_str) %>
   <form method="post" action="/delete" class="inline">
-    <input type="hidden" name="id" value="<%=h status.id_str %>">
-    <input type="hidden" name="location" value="/history">
-    <input type="submit" value="delete">
+    <input type="hidden" name="id" value="<%=h status.id_str %>" />
+    <input type="hidden" name="location" value="/history" />
+    <input type="submit" value="delete" />
   </form>
   <% end %>
   <hr />

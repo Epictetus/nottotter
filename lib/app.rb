@@ -22,10 +22,10 @@ class NottotterApp < Sinatra::Base
       }
     end
     
-    def tweet_tag(status, mode = :timeline)
+    def tweet_tag(status, opt = {:reply => true, :delete => true})
       erb :tweet, :locals => { 
         :status => status, 
-        :mode => mode,
+        :opt => opt,
         :current_user => current_user 
       }
     end

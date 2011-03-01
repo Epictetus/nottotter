@@ -5,7 +5,7 @@
     <div><%=h hijack.start_on %> <%=h hijack.from_user.screen_name %>→<%=h hijack.to_user.screen_name %></div>
     <% hijack.tweets.each do |status| %>
     <% next if status.deleted %>
-    <%= tweet_tag status, :history %>
+    <%= tweet_tag status, {:delete => true} %>
     <% end %>
     <hr />
   </div>
