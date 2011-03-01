@@ -126,7 +126,7 @@ background-repeat: #{bg_user.profile_background_tile};}</style>"
     end
     
     session[:user_id] = access_token.params[:user_id]
-    redirect '/nottori/'
+    redirect '/nottori'
   end
 
   get '/logout' do
@@ -140,14 +140,18 @@ background-repeat: #{bg_user.profile_background_tile};}</style>"
     erb :timeout
   end
 
-  get "/nottori/" do
+  get"/nottori/" do
+    redirect "/nottori"
+  end
+
+  get "/nottori" do
     require_user
     @bg_user = current_user
     @users = Model::User.recommends(current_user)
     erb :nottori
   end
 
-  post "/nottori/" do
+  post "/nottori" do
     require_user
     to_user = Model::User.new_from_user_id(params[:user_id])
 
