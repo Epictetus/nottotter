@@ -134,6 +134,18 @@ module Model
       self.profile[:description]
     end
 
+    def profile_background_color
+      "##{self.profile[:profile_background_color]}"
+    end
+    
+    def profile_background_image_url
+      self.profile[:profile_background_image_url]
+    end
+
+    def profile_background_tile
+      self.profile[:profile_background_tile]? "repeat" : "no-repeat"
+    end
+    
     def friends_ids
       @friends_ids ||= Model::Cache.get_or_set("friend_ids-#{self.user_id}", 3600) { # 同時に動かないから固定，friend増える可能性あるので少し短かめ
         Model.logger.info "get friend ids #{self.screen_name}"

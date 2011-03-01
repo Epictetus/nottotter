@@ -22,6 +22,15 @@ class NottotterApp < Sinatra::Base
       }
     end
     
+    def background_tag
+      @bg_user = Model::User.admin_user until @bg_user and defined? @bg_user
+      p @bg_user.profile_background_color
+      p @bg_user.profile_background_image_url
+      return "<style> body { background-color: #{@bg_user.profile_background_color};\
+background-image: url(#{@bg_user.profile_background_image_url});\
+background-repeat: #{@bg_user.profile_background_tile};}</style>"
+    end
+
     def require_user
       current_user or redirect '/'
     end
@@ -123,6 +132,7 @@ class NottotterApp < Sinatra::Base
 
   get "/nottori/" do
     require_user
+    @bg_user = current_user
     @users = Model::User.recommends(current_user)
     erb :nottori
   end
@@ -148,6 +158,7 @@ class NottotterApp < Sinatra::Base
 
   get "/timeline" do
     require_hijack
+    @bg_user = current_hijacked_user
     @timeline = current_hijacked_user.timeline
     erb :timeline
   end
