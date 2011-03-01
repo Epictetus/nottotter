@@ -41,6 +41,11 @@ module Model
       me
     end
 
+    def self.new_from_status_id(status_id)
+      found = self.collection.find_one({:tweets => {:$elemMatch => {:id_str => status_id.to_s, :deleted => { :$exists =>  false }}}})
+      return unless found
+      self.new(found)
+    end
 
     def self.create(data)
       %w{from_user to_user}.map(&:to_sym).each{|key|
@@ -125,11 +130,28 @@ module Model
     end
 
     def tweets
-      @data['tweets'] || []
+      (@data['tweets'] || []).map{|status|
+        Model::ActiveRubytter.new(status)
+      }
+    end
+
+    def delete_status(status_id)
+      begin
+        status_id = status_id.to_s
+        Model.logger.warn "delete status #{status_id}"
+        to_user.rubytter.remove_status(status_id)
+        self.class.collection.update({'tweets.id_str' => status_id}, {:$set => {'tweets.$.deleted' => 1}})
+      rescue => error
+        Model.logger.warn "#{error.class}: #{error.message}"
+      end
     end
 
     def remain_seconds
       finish_on - Time.now
+    end
+
+    def any_user?(user)
+      from_user.user_id == user.user_id || to_user.user_id == user.user_id
     end
 
     # --- tweet ---

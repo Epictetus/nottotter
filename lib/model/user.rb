@@ -121,6 +121,18 @@ module Model
       end
     end
 
+    def can_delete_status(status_id)
+      hijack = Model::Hijack.new_from_status_id(status_id.to_s)
+      return false unless hijack
+      hijack.any_user?(self)
+    end
+
+    def delete_status(status_id) # XXX: status_id.....
+      raise 'cannot delete that status' unless can_delete_status(status_id)
+      hijack = Model::Hijack.new_from_status_id(status_id)
+      hijack.delete_status(status_id)
+    end
+
     # --- profile ---
     def profile_image_url
       self.profile[:profile_image_url]

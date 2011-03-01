@@ -189,5 +189,24 @@ background-repeat: #{@bg_user.profile_background_tile};}</style>"
       })
   end
 
+  get "/history" do
+    @history = Model::Hijack.history
+    erb :history
+  end
+
+  post "/delete" do
+    begin
+      require_user
+      halt 400 unless params[:id]
+      current_user.delete_status(params[:id])
+      redirect params[:location] || '/'
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
+      halt 400
+    end
+  end
+
+
+
   logger.warn "env NO_TWEET is not set. Tweets will be posted." unless ENV['NO_TWEET']
 end
