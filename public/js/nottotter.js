@@ -59,7 +59,7 @@ window.nottotter.timeline = {
         $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', true) });
     },
     unlockPostForm: function() {
-        $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', false) });
+        $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', false).val('') });
     },
     showIndicator: function() {
         $('.indicator').show();
