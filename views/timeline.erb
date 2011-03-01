@@ -1,3 +1,4 @@
+<%= tweet_style_tag %>
 <form method="post" action="timeline">
   <% if params[:reply_id] %>
   <input type="hidden" name="reply_id" value=<%=h params[:reply_id] %> />
@@ -9,17 +10,19 @@
 <p><%=h flash[:tweet_error] %></p>
 
 <% @timeline.each do |status| %>
-<img src="<%=h status.user.profile_image_url %>" size=64></img>
-<p>
-  <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
-    <%=h status.user.screen_name %> 
-  </a>
-  <%=h status.user.name %>
-</p> 
-<p>
-  <%=tweet_filter status.text %>
-  <a href="timeline?reply_id=<%=h status.id%>&reply_user=<%=h status.user.screen_name %>">
-    reply
-  </a>
-</p>
+<div class="tweet">
+  <img src="<%=h status.user.profile_image_url %>" size=64></img>
+  <p>
+    <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
+      <%=h status.user.screen_name %> 
+    </a>
+    <%=h status.user.name %>
+  </p> 
+  <p>
+    <%=tweet_filter status.text %>
+    <a href="timeline?reply_id=<%=h status.id%>&reply_user=<%=h status.user.screen_name %>">
+      reply
+    </a>
+  </p>
+</div>
 <% end %>

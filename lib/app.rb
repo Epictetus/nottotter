@@ -22,13 +22,19 @@ class NottotterApp < Sinatra::Base
       }
     end
     
+    def bg_user
+      @bg_user = (@bg_user and defined? @bg_user)? @bg_user : Model::User.admin_user
+    end
+    
     def background_tag
-      @bg_user = Model::User.admin_user until @bg_user and defined? @bg_user
-      p @bg_user.profile_background_color
-      p @bg_user.profile_background_image_url
-      return "<style> body { background-color: #{@bg_user.profile_background_color};\
-background-image: url(#{@bg_user.profile_background_image_url});\
-background-repeat: #{@bg_user.profile_background_tile};}</style>"
+      return "<style> body { background-color: #{bg_user.profile_background_color};\
+background-image: url(#{bg_user.profile_background_image_url});\
+background-repeat: #{bg_user.profile_background_tile};}</style>"
+    end
+
+    def tweet_style_tag
+      return "<style> .tweet { color: #{bg_user.profile_text_color};} \
+.tweet a { color: #{bg_user.profile_link_color};}</style>"
     end
 
     def require_user
