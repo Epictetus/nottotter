@@ -173,7 +173,12 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/timeline.json" do
-    "timeline json"
+    require_hijack
+    content_type :json
+    JSON.unparse({
+        :remin_seconds => current_hijack.remain_seconds,
+        :timeline => current_hijacked_user.timeline.map{|status| status.to_hash}
+      })
   end
 
 end
