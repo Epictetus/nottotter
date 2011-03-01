@@ -18,12 +18,59 @@ window.nottotter.dispatcher = function(guard, func) {
     });
 };
 
-window.nottotter.dispatcher('/', function() {
-    alert('index');
-});
+window.nottotter.timeline = {
+    init: function() {
+        var self = this;
+        console.log('init timeline');
+        setInterval(function() {
+            self.getTimeline();
+        }, 10000);
 
-window.nottotter.dispatcher(/^\/not/, function() {
-    alert('not');
+        self.bindEvents();
+    },
+    bindEvents: function() {
+        var self = this;
+        $('form#post-tweet').submit(function(event) {
+            self.post();
+            return false;
+        });
+    },
+    getTimeline: function() {
+        var self = this;
+        console.log('getTimeline');
+        $.getJSON('/timeline.json', self.received);
+    },
+    post: function() {
+        var self = this;
+        console.log('post');
+        $.post('/timeline', $('#post-tweet').serialize(), function(res) {
+            self.hideIndicator();
+            self.unlockPostForm();
+            self.received(res);
+        });
+        self.showIndicator();
+        self.lockPostForm();
+    },
+    received: function(data) {
+        console.log('got');
+        console.log(data);
+    },
+    lockPostForm: function() {
+        $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', true) });
+    },
+    unlockPostForm: function() {
+        $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', false) });
+    },
+    showIndicator: function() {
+        $('.indicator').show();
+    },
+    hideIndicator: function() {
+        $('.indicator').hide();
+    },
+};
+
+window.nottotter.dispatcher('/timeline', function() {
+    window.nottotter.timeline.init();
 });
 
 $(function() {
