@@ -62,7 +62,10 @@ module Model
           :open => true,
         })
 
-      self.new_from_user(from_user)
+      me = self.new_from_user(from_user)
+      Model.logger.info "#{me.from_user.screen_name} start hijack #{me.to_user.screen_name}"
+      me
+
     end
 
     def initialize(data)        # private
@@ -138,29 +141,23 @@ module Model
       return unless open?
       self.class.collection.update({:_id => self._id}, {:$set => {:open => false}})
       @data['open'] = false
-      # notice_close
+      notice_close
     end
 
     # --- notification ---
     def notice_start
-      to_user.rubytter.update(
-        "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんをのっとったー \
-(#{finish_on.localtime.strftime("%H時%M分")}まで) \
-#nottotterJP"
-        )
+      to_user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんをのっとったー (#{finish_on.localtime.strftime("%H時%M分")}まで) #nottotterJP"
     end
 
     def notice_start_dm
-      to_user.rubytter.send_direct_message({
-          :user => to_user.user_id,
-          :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}" # twitterがやってくれました
-        })
+      to_user.send_direct_message(
+        :user => to_user.user_id,
+        :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}"
+      )
     end
 
     def notice_close
-      to_user.rubytter.update("@#{from_user.screen_name} さんののっとりが終了しました. (#{finish_on.localtime.strftime("%H時%M分")}) #nottotterJP")
-    rescue => error
-      Model.logger.warn error
+      to_user.tweet "@#{from_user.screen_name} さんののっとりが終了しました. (#{finish_on.localtime.strftime("%H時%M分")}) #nottotterJP"
     end
 
   end

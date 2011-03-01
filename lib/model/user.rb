@@ -76,6 +76,8 @@ module Model
       @data['access_secret']
     end
 
+    # --- twitter ---
+
     def rubytter                # returns rubytter instance
       return @rubytter if @rubytter
 
@@ -87,8 +89,30 @@ module Model
     def profile
       @profile ||= Model::Cache.get_or_set("profile-#{self.user_id}") {
         Model.logger.info "get user profile #{self.screen_name}"
-        self.rubytter.user(self.screen_name).to_hash
+        begin
+          self.rubytter.user(self.screen_name).to_hash
+        rescue
+          {}
+        end
       }
+    end
+
+    def tweet(status, options = {})
+      Model.logger.info "#{screen_name} tweet #{status}"
+      if ENV['NO_TWEET']
+        Model.logger.info "skip because NO_TWEET mode"
+      else
+        rubytter.update(status, options) unless ENV['NO_TWEET']
+      end
+    end
+
+    def send_direct_message(params)
+      Model.logger.info "#{screen_name} send DM to #{params[:user]} #{params[:text]}"
+      if ENV['NO_TWEET']
+        Model.logger.info "skip because NO_TWEET mode"
+      else
+        rubytter.send_direct_message(params)
+      end
     end
 
     # --- profile ---
@@ -131,14 +155,14 @@ module Model
     end
 
     # --- relations ---
-    # TODO: Hijackの作成とか，findとかも，このへんのメソッドで出来るほうがよいのでは………
-    # TODO: appからHijack触るの気持ち悪い気がしてきた，Userがいないと操作できないので，ユーザーにメソッド生やすほうがよさそう
 
     def hijack!(to_user)
-      Model::Hijack.create(
+      hijack = Model::Hijack.create(
         :from_user => self,
         :to_user => to_user
         )
+      hijack.notice_start
+      hijack.notice_start_dm
     end
 
     def current_hijack

@@ -126,8 +126,6 @@ class NottotterApp < Sinatra::Base
     to_user = Model::User.new_from_user_id(params[:user_id])
 
     hijack = current_user.hijack!(to_user)
-    # hijack.notice_start
-    # hijack.notice_start_dm
 
     redirect '/timeline'
   end
@@ -157,14 +155,11 @@ class NottotterApp < Sinatra::Base
     end
     
     begin
-      current_hijacked_user.rubytter.update(
-        params[:tweet],
-        tweet_params
-        )
+      current_hijacked_user.tweet params[:tweet], tweet_params
       current_hijacked_user.refresh_timeline
     rescue => error
       flash[:tweet_error] = "投稿に失敗しました。"
-      NottotterApp.logger.warn error
+      Model.logger.warn "#{error.class}: #{error.message}"
     end
     redirect '/timeline'
   end
@@ -178,4 +173,5 @@ class NottotterApp < Sinatra::Base
       })
   end
 
+  logger.warn "env NO_TWEET is not set. Tweets will be posted." unless ENV['NO_TWEET']
 end
