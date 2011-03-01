@@ -141,11 +141,15 @@ module Model
       }
     end
 
+    def protected_filter(timeline)
+      timeline.select {|status| !status[:user][:protected]}
+    end
+    
     def timeline
       return @timeline if @timeline
       @timeline ||= Model::Cache.get_or_set("timeline-#{self.user_id}", 30) {
         Model.logger.info "get timeline #{self.screen_name}"
-        self.rubytter.friends_timeline.map{|status| status.to_hash}
+        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash})
       }.map{|status|
         Model::ActiveRubytter.new(status)
       }
@@ -155,9 +159,9 @@ module Model
       return @refreshed if @refreshed
       @refreshed ||= Model::Cache.force_set(
         "timeline-#{self.user_id}",
-        self.rubytter.friends_timeline.map{|status| status.to_hash},
-        30
-        )
+        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash},
+          30
+        ))
     end
 
     # --- relations ---
