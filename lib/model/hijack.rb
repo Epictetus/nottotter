@@ -73,6 +73,25 @@ module Model
       Model::Database.collection('hijack')
     end
 
+    # --- history ---
+    def self.history(params = {})
+      # params: :to_user, :from_user, :any_user
+      if params[:any_user]
+        user = params[:any_user]
+        query = {:$or => [{:from_user_id => user.user_id}, {:to_user_id => user.user_id}]}
+      else
+        query = {}
+        from_user = params[:from_user]
+        to_user = params[:to_user]
+        query[:from_user_id] = from_user.user_id if from_user
+        query[:to_user_id] = to_user.user_id if to_user
+      end
+
+      self.collection.find(query, {:sort => [:start_on, :desc]}).to_a.map{|found|
+        self.new(found)
+      }
+    end
+
     # --- instance method ---
 
     # --- attributes ---
