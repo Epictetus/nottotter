@@ -11,7 +11,17 @@ class NottotterApp < Sinatra::Base
 
   helpers do
     alias_method :h, :escape_html
-
+    
+    def tweet_filter(text)
+      escape_html(text).gsub(/@([\w_]+)/){
+        m = $1
+        "<a href='http://twitter.com/#{m}'>#{m}</a>"
+      }.gsub(/#([\w_]+)/){
+        m = $1
+        "<a href='http://twitter.com/search?q=##{m}/'>#{m}</a>"
+      }
+    end
+    
     def require_user
       current_user or redirect '/'
     end

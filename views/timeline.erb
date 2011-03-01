@@ -17,7 +17,7 @@
   <%=h status.user.name %>
 </p> 
 <p>
-  <%=h status.text %>
+  <%=tweet_filter status.text %>
   <a href="timeline?reply_id=<%=h status.id%>&reply_user=<%=h status.user.screen_name %>">
     reply
   </a>
