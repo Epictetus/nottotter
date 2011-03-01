@@ -46,6 +46,11 @@ module Model
       self.new_from_user_id(data[:user_id])
     end
 
+    def self.remove(user)
+      raise "#user must be kind of Model::User" unless user.kind_of? Model::User
+      self.collection.remove({:user_id => user.user_id})
+    end
+
     def initialize(data)        # private
       @data = data
     end

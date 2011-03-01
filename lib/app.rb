@@ -91,16 +91,22 @@ class NottotterApp < Sinatra::Base
       :oauth_token => params[:oauth_token],
       :oauth_verifier => params[:oauth_verifier])
     
-    Model::User.register({
+    session.delete(:request_token)
+    session.delete(:request_secret)
+    
+    user = Model::User.register({
         :user_id => access_token.params[:user_id],
         :access_token => access_token.params[:oauth_token],
         :access_secret => access_token.params[:oauth_token_secret],
         :screen_name => access_token.params[:screen_name]
       })
     
+    if user.profile[:protected]
+      Model::User.remove(user)
+      return erb :user_protected
+    end
+    
     session[:user_id] = access_token.params[:user_id]
-    session.delete(:request_token)
-    session.delete(:request_secret)
     redirect '/nottori/'
   end
 
