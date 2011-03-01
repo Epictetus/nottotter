@@ -196,7 +196,9 @@ module Model
         stats = "1回目"
       end
 
-      to_user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+      [Model::User::ADMIN_USER, to_user].each{|user|
+        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+      }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
     end
@@ -211,7 +213,9 @@ module Model
     end
 
     def notice_close
-      to_user.tweet "@#{from_user.screen_name} さんの乗っ取りが終了しました(#{tweet_count}回投稿) #nottotterJP"
+      [Model::User::ADMIN_USER, to_user].each{|user|
+        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+      }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
     end
