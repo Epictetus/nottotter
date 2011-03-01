@@ -15,6 +15,10 @@ a:hover {
     display: inline;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 h1 {
     letter-spacing: 0.7em;
     font-style: italic;
