@@ -51,18 +51,16 @@ module Model
       from_user = data[:from_user]
       to_user = data[:to_user]
 
-      self.collection.update({
-          :from_user_id => from_user.user_id,
-          :finish_on => {'$gt' => Time.now},
-        },
-        {
+      old_hijack = self.new_from_user(from_user)
+      old_hijack.close! if old_hijack
+
+      self.collection.insert({
           :from_user_id => from_user.user_id,
           :to_user_id => to_user.user_id,
           :start_on => Time.now,
           :finish_on => Time.now + EXPIRE,
           :open => true,
-        },
-        {:upsert => true})
+        })
 
       self.new_from_user(from_user)
     end
