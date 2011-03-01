@@ -17,7 +17,8 @@ module Model
         user.user_id == from_user.user_id
       }.sort_by{|user|
         score = rand
-        score += 1 if from_user.friends_ids.include? user.user_id
+        score += 1.0 if from_user.friends_ids.include? user.user_id.to_i
+        score
       }.reverse
     end
 
