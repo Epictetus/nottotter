@@ -130,6 +130,35 @@ module Model
         )
     end
 
+    # --- relations ---
+    # TODO: Hijackの作成とか，findとかも，このへんのメソッドで出来るほうがよいのでは………
+    # TODO: appからHijack触るの気持ち悪い気がしてきた，Userがいないと操作できないので，ユーザーにメソッド生やすほうがよさそう
+
+    # ユーザーが関わったHijack全部(ページャとかは将来的に)
+    def history
+      Model::Hijack.history(:any_user => self)
+    end
+
+    # from_userがユーザーなhistory
+    def hijack_history
+      Model::Hijack.history(:from_user => self)
+    end
+
+    # to_userがユーザーであるHistory
+    def hijacked_history
+      Model::Hijack.history(:to_userr => self)
+    end
+
+    # from_userがユーザーの最新のHijack，引数でto_user指定可
+    def last_hijack(to_user = nil)
+      Model::Hijack.history(:from_user => self, :to_user => to_user)
+    end
+
+    # to_userがユーザーの最新のHijack，引数でfrom_user指定可
+    def last_hijacked(from_user = nil)
+      Model::Hijack.history(:from_user => from_user, :to_user => self)
+    end
+
     # --- constants ---
     TOKEN, SECRET, ID, NAME = open(File.expand_path("~/.nottotter_admin")).read.split("\n")
     ADMIN_USER = User.register({
