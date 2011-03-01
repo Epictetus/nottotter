@@ -185,13 +185,20 @@ background-repeat: #{bg_user.profile_background_tile};}</style>"
       tweet_params[:in_reply_to_status_id] = params[:reply_id]
     end
     
+    error_message = false
     begin
       current_hijack.tweet params[:tweet], tweet_params
     rescue => error
-      flash[:tweet_error] = "投稿に失敗しました。"
+      error_message = "投稿に失敗しました。"
       Model.logger.warn "#{error.class}: #{error.message}"
     end
-    redirect '/timeline'
+
+    content_type :json
+    JSON.unparse({
+        :error => error_message,
+        :remin_seconds => current_hijack.remain_seconds,
+        :timeline => current_hijacked_user.timeline.map{|status| status.to_hash}
+      })
   end
 
   get "/timeline.json" do
