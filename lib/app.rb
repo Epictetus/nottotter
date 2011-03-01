@@ -15,10 +15,10 @@ class NottotterApp < Sinatra::Base
     def tweet_filter(text)
       escape_html(text).gsub(/@([\w_]+)/){
         m = $1
-        "<a href='http://twitter.com/#{m}'>#{m}</a>"
+        "<a href='http://twitter.com/#{m}'>@#{m}</a>"
       }.gsub(/#([\w_]+)/){
         m = $1
-        "<a href='http://twitter.com/search?q=##{m}/'>#{m}</a>"
+        "<a href='http://twitter.com/search?q=##{m}/'>##{m}</a>"
       }
     end
     
