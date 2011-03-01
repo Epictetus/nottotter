@@ -174,6 +174,7 @@ class NottotterApp < Sinatra::Base
         params[:tweet],
         tweet_params
         )
+      current_hijacked_user.refresh_timeline
     rescue => error
       flash[:tweet_error] = "投稿に失敗しました。"
       NottotterApp.logger.warn error

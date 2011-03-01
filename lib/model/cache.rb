@@ -21,5 +21,13 @@ module Model
       Model.logger.warn error
       new_value || yield
     end
+
+    def self.force_set(key, value, expire = 3600 * 24 * rand)
+      key = key.to_s
+      cache = self.instance.get(key)
+      self.instance.delete(key) if cache
+      self.instance.set(key, value, expire)
+      value
+    end
   end
 end

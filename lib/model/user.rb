@@ -120,6 +120,15 @@ module Model
       }
     end
     
+    def refresh_timeline
+      return @refreshed if @refreshed
+      @refreshed ||= Model::Cache.force_set(
+        "timeline-#{self.user_id}",
+        self.rubytter.friends_timeline.map{|status| status.to_hash},
+        30
+        )
+    end
+
     # --- constants ---
     TOKEN, SECRET, ID, NAME = open(File.expand_path("~/.nottotter_admin")).read.split("\n")
     ADMIN_USER = User.register({
