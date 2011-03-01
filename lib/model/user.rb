@@ -101,8 +101,9 @@ module Model
       Model.logger.info "#{screen_name} tweet #{status}"
       if ENV['NO_TWEET']
         Model.logger.info "skip because NO_TWEET mode"
+        'ok'
       else
-        rubytter.update(status, options) unless ENV['NO_TWEET']
+        rubytter.update(status, options).to_hash unless ENV['NO_TWEET']
       end
     end
 
@@ -179,23 +180,23 @@ module Model
     end
 
     # from_userがユーザーなhistory
-    def hijack_history
-      Model::Hijack.history(:from_user => self)
+    def hijack_history(to_user = nil)
+      Model::Hijack.history(:from_user => self, :to_user => to_user)
     end
 
     # to_userがユーザーであるHistory
-    def hijacked_history
-      Model::Hijack.history(:to_userr => self)
+    def hijacked_history(from_user = nil)
+      Model::Hijack.history(:from_user => from_user, :to_user => self)
     end
 
     # from_userがユーザーの最新のHijack，引数でto_user指定可
     def last_hijack(to_user = nil)
-      Model::Hijack.history(:from_user => self, :to_user => to_user)
+      hijack_history(to_user).first
     end
 
     # to_userがユーザーの最新のHijack，引数でfrom_user指定可
     def last_hijacked(from_user = nil)
-      Model::Hijack.history(:from_user => from_user, :to_user => self)
+      hijacked_history(from_user).first
     end
 
     # --- constants ---

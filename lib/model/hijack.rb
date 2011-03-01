@@ -124,8 +124,23 @@ module Model
       @data['finish_on']
     end
 
+    def tweets
+      @data['tweets'] || []
+    end
+
     def remain_seconds
       finish_on - Time.now
+    end
+
+    # --- tweet ---
+    def tweet(text, params)
+      tweet = to_user.tweet text, params
+      self.update(:$push => {:tweets => tweet})
+      to_user.refresh_timeline
+    end
+
+    def tweet_count
+      tweets.length
     end
 
     # --- session ---
@@ -139,14 +154,27 @@ module Model
 
     def close!
       return unless open?
-      self.class.collection.update({:_id => self._id}, {:$set => {:open => false}})
+      self.update(:$set => {:open => false})
       @data['open'] = false
       notice_close
     end
 
+    def update(params)
+      self.class.collection.update({:_id => self._id}, params)
+    end
+
     # --- notification ---
     def notice_start
-      to_user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんをのっとったー (#{finish_on.localtime.strftime("%H時%M分")}まで) #nottotterJP"
+      history = from_user.hijack_history(to_user)
+      if history.length > 1
+        duration = seconds_to_duration(history[0].start_on - history[1].start_on)
+        count = history.length
+        stats = "#{duration}ぶり#{count}回目"
+      else
+        stats = "1回目"
+      end
+
+      to_user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
     end
 
     def notice_start_dm
@@ -157,7 +185,23 @@ module Model
     end
 
     def notice_close
-      to_user.tweet "@#{from_user.screen_name} さんののっとりが終了しました. (#{finish_on.localtime.strftime("%H時%M分")}) #nottotterJP"
+      to_user.tweet "@#{from_user.screen_name} さんの乗っ取りが終了しました(#{tweet_count}回投稿) #nottotterJP"
+    end
+
+    def seconds_to_duration(seconds)
+      seconds = seconds.to_i
+      if seconds < 60
+        "#{seconds}秒"
+      elsif seconds < 60 * 60
+        minutes = seconds / 60
+        "#{minutes}分"
+      elsif seconds < 60 * 60 * 24
+        hours = seconds / (60 * 60)
+        "#{hours}時間"
+      else
+        days = seconds / (60 * 60 * 24)
+        "#{days}日"
+      end
     end
 
   end
