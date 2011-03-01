@@ -27,14 +27,11 @@ class NottotterApp < Sinatra::Base
     end
     
     def background_tag
-      return "<style> body { background-color: #{bg_user.profile_background_color};\
-background-image: url(#{bg_user.profile_background_image_url});\
-background-repeat: #{bg_user.profile_background_tile};}</style>"
+      erb :bg_style
     end
 
     def tweet_style_tag
-      return "<style> .tweet { color: #{bg_user.profile_text_color};} \
-.tweet a { color: #{bg_user.profile_link_color};}</style>"
+      erb :tweet_style
     end
 
     def require_user
