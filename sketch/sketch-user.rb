@@ -22,3 +22,6 @@ pp Model::User.new_from_user_id(user_id)
 
 warn 'all users'
 pp Model::User.all
+
+warn 'admin user'
+pp Model::User.admin_user

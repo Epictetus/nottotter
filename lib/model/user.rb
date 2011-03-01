@@ -4,7 +4,7 @@ require 'rubytter'
 module Model
   class User
     # --- class method ---
-
+    
     def self.all
       self.collection.find.map{|user|
         self.new(user)
@@ -34,7 +34,7 @@ module Model
     end
 
     def self.admin_user              # returns nottotterJP
-      self.new_from_screen_name('admin_user')
+      ADMIN_USER
     end
 
     def self.register(data)
@@ -90,7 +90,6 @@ module Model
       }
     end
 
-
     # --- profile ---
     def profile_image_url
       self.profile[:profile_image_url]
@@ -120,6 +119,15 @@ module Model
         Model::ActiveRubytter.new(status)
       }
     end
-
+    
+    # --- constants ---
+    TOKEN, SECRET, ID, NAME = open(File.expand_path("~/.nottotter_admin")).read.split("\n")
+    ADMIN_USER = User.register({
+        :user_id => ID,
+        :access_token => TOKEN, 
+        :access_secret => SECRET,
+        :screen_name => NAME
+      })
+    
   end
 end
