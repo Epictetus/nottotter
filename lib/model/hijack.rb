@@ -153,7 +153,7 @@ module Model
     def notice_start_dm
       to_user.rubytter.send_direct_message({
           :user => to_user.user_id,
-          :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}" # bit.lyとかで圧縮したい
+          :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}" # twitterがやってくれました
         })
     end
 
