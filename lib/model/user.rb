@@ -134,6 +134,21 @@ module Model
     # TODO: Hijackの作成とか，findとかも，このへんのメソッドで出来るほうがよいのでは………
     # TODO: appからHijack触るの気持ち悪い気がしてきた，Userがいないと操作できないので，ユーザーにメソッド生やすほうがよさそう
 
+    def hijack!(to_user)
+      Model::Hijack.create(
+        :from_user => self,
+        :to_user => to_user
+        )
+    end
+
+    def current_hijack
+      Model::Hijack.new_from_user(self)
+    end
+
+    def expired_hijack
+      Model::Hijack.new_expired_from_user(self)
+    end
+
     # ユーザーが関わったHijack全部(ページャとかは将来的に)
     def history
       Model::Hijack.history(:any_user => self)

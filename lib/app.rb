@@ -42,7 +42,7 @@ class NottotterApp < Sinatra::Base
       return unless current_user
       return @current_hijack if defined? @current_hijack
 
-      @current_hijack = Model::Hijack.new_from_user(current_user)
+      @current_hijack = current_user.current_hijack
     end
 
     def current_hijacked_user
@@ -60,7 +60,7 @@ class NottotterApp < Sinatra::Base
       return unless current_user
       return @expired_hijack if defined? @expired_hijack
 
-      @expired_hijack = Model::Hijack.new_expired_from_user(current_user)
+      @expired_hijack = current_user.expired_hijack
     end
 
   end
@@ -124,11 +124,8 @@ class NottotterApp < Sinatra::Base
   post "/nottori/" do
     require_user
     to_user = Model::User.new_from_user_id(params[:user_id])
-    from_user = Model::User.new_from_user_id(session[:user_id])
-    hijack = Model::Hijack.create({
-        :from_user => from_user,
-        :to_user => to_user
-      })
+
+    hijack = current_user.hijack!(to_user)
     # hijack.notice_start
     # hijack.notice_start_dm
 

@@ -145,7 +145,7 @@ module Model
     def notice_start
       to_user.rubytter.update(
         "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんをのっとったー \
-(#{current_hijack.finish_on.localtime.strftime("%H時%M分")}まで) \
+(#{finish_on.localtime.strftime("%H時%M分")}まで) \
 #nottotterJP"
         )
     end
