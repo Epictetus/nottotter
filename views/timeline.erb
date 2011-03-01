@@ -1,9 +1,7 @@
 <div class="grid_8">
 <%= tweet_style_tag %>
 <form id="post-tweet" method="post" action="timeline">
-  <% if params[:reply_id] %>
-  <input type="hidden" name="reply_id" value=<%=h params[:reply_id] %> />
-  <% end %>
+  <input type="hidden" name="reply_id" value="<%=h params[:reply_id] %>" />
   <textarea name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
   <br />
   <input type="submit" value="tweet" />
