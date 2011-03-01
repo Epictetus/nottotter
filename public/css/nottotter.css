@@ -31,7 +31,12 @@ h1 a {
 }
 
 #contain-all {
-    padding-top: 2em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 1em;
+    background: white;
+    min-height: 600px;
+    border-radius: 1em;
 }
 
 
