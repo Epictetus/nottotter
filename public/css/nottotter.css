@@ -11,6 +11,10 @@ a:hover {
     text-decoration: underline;
 }
 
+.inline {
+    display: inline;
+}
+
 h1 {
     letter-spacing: 0.7em;
     font-style: italic;
