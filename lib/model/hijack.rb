@@ -123,6 +123,21 @@ module Model
     end
 
     # --- notification ---
+    def notice_start
+      to_user.rubytter.update(
+        "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんをのっとったー \
+(#{current_hijack.finish_on.localtime.strftime("%H時%M分")}まで) \
+#nottotterJP"
+        )
+    end
+
+    def notice_start_dm
+      to_user.rubytter.send_direct_message({
+          :user => to_user.user_id,
+          :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}" # bit.lyとかで圧縮したい
+        })
+    end
+
     def notice_close
       to_user.rubytter.update("@#{from_user.screen_name} さんののっとりが終了しました. (#{finish_on.localtime.strftime("%H時%M分")}) #nottotterJP")
     rescue => error
