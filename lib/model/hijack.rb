@@ -197,17 +197,23 @@ module Model
       end
 
       to_user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
     end
 
     def notice_start_dm
       to_user.send_direct_message(
         :user => to_user.user_id,
         :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name}"
-      )
+        )
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
     end
 
     def notice_close
       to_user.tweet "@#{from_user.screen_name} さんの乗っ取りが終了しました(#{tweet_count}回投稿) #nottotterJP"
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
     end
 
     def seconds_to_duration(seconds)
