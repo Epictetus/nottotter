@@ -14,7 +14,7 @@ module Model
     def self.recommends(from_user)
       # 毎回変える，先頭に知ってる人
       self.all.delete_if {|user|
-        user.user_id == from_user.user_id
+        user.user_id == from_user.user_id or user.admin_user?
       }.sort_by{|user|
         score = rand
         score += 1.0 if from_user.friends_ids.include? user.user_id.to_i
