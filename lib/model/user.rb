@@ -38,6 +38,10 @@ module Model
       ADMIN_USER
     end
 
+    def admin_user?
+      self.user_id == ADMIN_USER.user_id 
+    end
+
     def self.register(data)
       %w{screen_name user_id access_token access_secret}.map(&:to_sym).each{|key|
         raise "data must have #{key}" unless data.has_key? key
@@ -60,6 +64,13 @@ module Model
     end
 
     # --- instance method ---
+
+    def update_admin
+      open(File.expand_path("~/.nottotter_admin"), "w"){|f|
+        f.puts [self.access_token, self.access_secret, self.user_id, self.screen_name].join("\n")
+      }
+      Model.logger.info("update admin token")
+    end
 
     def key
       @data['_id'].to_s

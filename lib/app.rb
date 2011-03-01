@@ -116,8 +116,12 @@ background-repeat: #{bg_user.profile_background_tile};}</style>"
         :screen_name => access_token.params[:screen_name]
       })
     
+    if user.admin_user?
+      user.update_admin
+    end
+
     if user.profile[:protected]
-      Model::User.remove(user)
+      Model::User.remove(user) unless user.admin_user?
       return erb :user_protected
     end
     
@@ -196,6 +200,7 @@ background-repeat: #{bg_user.profile_background_tile};}</style>"
   end
 
   get "/history" do
+    @bg_user = current_user
     @history = Model::Hijack.history
     erb :history
   end
