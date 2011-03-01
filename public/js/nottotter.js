@@ -59,7 +59,10 @@ window.nottotter.timeline = {
         $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', true) });
     },
     unlockPostForm: function() {
-        $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', false).val('') });
+        $('#post-tweet input, #post-tweet textarea').each(function() {
+            $(this).attr('disabled', false);
+            if ($(this).attr('type') != 'submit') $('#post-tweet textarea').val('');
+        });
     },
     showIndicator: function() {
         $('.indicator').show();
