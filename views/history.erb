@@ -1,5 +1,5 @@
+<%=user_style_tag current_user %>
 <div class="grid_8">
-  <%= tweet_style_tag %>
   <% @history.each do |hijack| %>
   <div class="hijack-item">
     <div><%=h hijack.start_on %> <%=h hijack.from_user.screen_name %>→<%=h hijack.to_user.screen_name %></div>

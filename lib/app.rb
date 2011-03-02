@@ -44,7 +44,8 @@ class NottotterApp < Sinatra::Base
       }
     end
 
-    def user_style_tag(user = Model::User.admin_user)
+    def user_style_tag(user)
+      user = Model::User.admin_user if user.nil? or !(defined? user)
       erb :user_style, :locals => { :user => user }
     end
 
