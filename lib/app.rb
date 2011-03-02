@@ -37,6 +37,7 @@ class NottotterApp < Sinatra::Base
       hijack_users = hijack.map{|h| h.to_user }.uniq
       hijacked_users = hijacked.map{|h| h.from_user }.uniq
       erb :user_profile , :locals => {
+        :user => user,
         :hijack => hijack,
         :hijack_users => hijack_users,
         :hijacked => hijacked,

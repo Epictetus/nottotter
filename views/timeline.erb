@@ -14,8 +14,9 @@
 <% end %>
 </div>
 <div class="grid_4">
+  あなたのステータス
+  <%= user_profile_tag current_user %>
   のっとっているユーザー
   <%= user_profile_tag current_hijacked_user %>
-  <br />
   <%= erb :widget %>
 </div>
