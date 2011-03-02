@@ -86,10 +86,15 @@ table.timeline {
 }
 
 .profile-item {
-    margin: 4px;
+    margin-bottom: 5px;
 }
+
+table.profile-item {
+    text-align: center;
+}
+
 .small-icon {
-    width: 32px;
+    width: 24px;
     margin: 2px; 
     vertical-align: middle;
 }

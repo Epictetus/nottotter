@@ -1,6 +1,8 @@
 <% count.times do |i| %>
 <% break if i >= users.size %>
 <a href="http://twitter.com/#!/<%=h users[i].screen_name %>">
-<img class="small-icon" src="<%=h users[i].profile_image_url %>">
+  <img class="small-icon" 
+       src="<%=h users[i].profile_image_url %>"
+       title="<%=h users[i].screen_name %>">
 </a>
 <% end %>

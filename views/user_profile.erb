@@ -6,19 +6,14 @@
     </strong>
   </div>
 
-  <div class="profile-item">
-    のっとった回数 <strong><%=h hijack.size %></strong>
-    <br />
-    のっとられた回数 <strong><%=h hijacked.size %></strong>  
-  </div>
-
-  <div class="profile-item">
-    のっとったユーザー <strong><%=h hijack_users.size %></strong><br />
-    <%= icon_list_tag hijack_users %>
-  </div>
-
-  <div class="profile-item">
-    のっとられたユーザー <strong><%=h hijacked_users.size %></strong><br />
-    <%= icon_list_tag hijacked_users %>
-  </div>
+  <table width="100%" class="profile-item">
+    <tr>
+      <td width="50%">のっとった <strong><%=h hijack_users.size %></strong></td>	
+      <td width="50%">のっとられた <strong><%=h hijacked_users.size %></strong></td>
+    </tr>
+    <tr>
+      <td><%= icon_list_tag hijack_users %></td>
+      <td><%= icon_list_tag hijacked_users %></td>
+    </tr>
+  </table>
 </div>
