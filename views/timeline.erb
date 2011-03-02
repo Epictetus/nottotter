@@ -10,6 +10,6 @@
 <p><%=h flash[:tweet_error] %></p>
 
 <% @timeline.each do |status| %>
-<%= tweet_tag status %>
+<%= tweet_tag status, "timeline" %>
 <% end %>
 </div>

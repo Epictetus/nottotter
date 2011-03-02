@@ -77,3 +77,8 @@ div.tweet-item {
 .tweet-item form {
     float: left;
 }
+
+.tweet-footer-item {
+    margin-left: 4px;
+    margin-right: 4px;
+}
