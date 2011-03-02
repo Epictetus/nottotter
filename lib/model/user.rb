@@ -64,6 +64,14 @@ module Model
     end
 
     # --- instance method ---
+    
+    def hash
+      self.user_id.hash
+    end
+
+    def eql?(comp)
+      self.user_id == comp.user_id
+    end
 
     def update_admin
       open(File.expand_path("~/.nottotter_admin"), "w"){|f|

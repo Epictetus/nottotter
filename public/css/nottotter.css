@@ -82,3 +82,12 @@ td.tweet-profile-icon {
 td.tweet-footer {
     vertical-align: bottom;
 }
+
+.profile-item {
+    margin-top: 10px;
+}
+.small-icon {
+    width: 32px;
+    margin: 2px; 
+    vertical-align: middle;
+}

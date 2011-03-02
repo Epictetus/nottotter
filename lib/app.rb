@@ -28,6 +28,23 @@ class NottotterApp < Sinatra::Base
       }
     end
     
+    def icon_list_tag(users, count = 7)
+      erb :icon_list, :locals => {:users => users , :count => count}
+    end
+
+    def user_profile_tag(user)
+      hijack = Model::Hijack.history({:from_user => user})
+      hijacked = Model::Hijack.history({:to_user => user}) 
+      hijack_users = hijack.map{|h| h.to_user }.uniq
+      hijacked_users = hijacked.map{|h| h.from_user }.uniq
+      erb :user_profile , :locals => {
+        :hijack => hijack,
+        :hijack_users => hijack_users,
+        :hijacked => hijacked,
+        :hijacked_users => hijacked_users
+      }
+    end
+
     def bg_user
       @bg_user = (@bg_user and defined? @bg_user)? @bg_user : Model::User.admin_user
     end
