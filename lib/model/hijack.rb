@@ -214,7 +214,7 @@ module Model
 
     def notice_close
       [Model::User::ADMIN_USER, to_user].each{|user|
-        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
