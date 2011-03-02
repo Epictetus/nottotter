@@ -157,6 +157,7 @@ module Model
     # --- tweet ---
     def tweet(text, params)
       tweet = to_user.tweet text, params
+      return if ENV['NO_TWEET'] 
       self.update(:$push => {:tweets => tweet})
       to_user.refresh_timeline
     end
