@@ -23,7 +23,6 @@ class NottotterApp < Sinatra::Base
     def tweet_tag(status, location)
       erb :tweet, :locals => { 
         :status => status, 
-        :current_user => current_user,
         :location => location
       }
     end
