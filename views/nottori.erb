@@ -1,24 +1,25 @@
-<% if @users.length > 1 %>
+<div class="grid_8">
+  <% if @users.length > 1 %>
   <p>のっとるユーザーを選んでください．</p>
-<% end %>
-<table class="select-user">
-  <% @users.each do |user| %>
-  <tr class="user">
-    <td>
-      <img class="profile-image" src="<%=h user.profile_image_url %>" title="<%=h user.screen_name %>">
-    </td>
-    <td>
-      <strong><%=h user.screen_name %></strong> <%=h user.profile_name %>
-      <br>
-      <%=h user.profile_description %>
-    </td>
-    <td>
-      <form method="post" action="/nottori">
-        <input type="hidden" name="user_id" value="<%= user.user_id %>" />
-        <input type="submit" value="のっとる" />
-      </form>
-    </td>
-  </tr>
   <% end %>
-</table>
-
+  <table class="select-user" width="100%">
+    <% @users.each do |user| %>
+    <tr class="user">
+      <td width="10%">
+	<img class="profile-image" src="<%=h user.profile_image_url %>" title="<%=h user.screen_name %>">
+      </td>
+      <td width="80%" style="vertical-align:top;">
+	<strong><%=h user.screen_name %></strong> <%=h user.profile_name %>
+	<br>
+	<%=h user.profile_description %>
+      </td>
+      <td>
+	<form method="post" action="/nottori">
+          <input type="hidden" name="user_id" value="<%= user.user_id %>" />
+          <input type="submit" value="のっとる" />
+	</form>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
