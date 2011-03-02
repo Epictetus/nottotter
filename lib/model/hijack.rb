@@ -191,13 +191,13 @@ module Model
       if history.length > 1
         duration = seconds_to_duration(history[0].start_on - history[1].start_on)
         count = history.length
-        stats = "#{duration}ぶり#{count}回目"
+        status = "#{duration}ぶり#{count}回目"
       else
-        stats = "1回目"
+        status = "1回目"
       end
 
       [Model::User::ADMIN_USER, to_user].each{|user|
-        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{stats}) #nottotterJP"
+        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました(#{status}) #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
