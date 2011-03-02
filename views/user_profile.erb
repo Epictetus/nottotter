@@ -1,0 +1,24 @@
+<div class="profile-item">
+  <img class="small-icon" src="<%=h current_hijacked_user.profile_image_url %>" />
+  <strong>
+    <%=h current_hijacked_user.profile_name %> (@<%=h current_hijacked_user.screen_name %>)
+  </strong>
+</div>
+
+<div class="profile-item">
+のっとった回数 <strong><%=h hijack.size %></strong>
+<br />
+のっとられた回数 <strong><%=h hijacked.size %></strong>  
+</div>
+
+
+<div class="profile-item">
+のっとったユーザー <strong><%=h hijack_users.size %></strong><br />
+<%= icon_list_tag hijack_users %>
+</div>
+<div class="profile-item">
+のっとられたユーザー <strong><%=h hijacked_users.size %></strong><br />
+<%= icon_list_tag hijacked_users %>
+</div>
+
+
