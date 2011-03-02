@@ -222,7 +222,7 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/timeline.json" do
-    require_hijack
+    current_hijack or halt 401, "Unauthorized"
     content_type :json
     JSON.unparse({
         :remin_seconds => current_hijack.remain_seconds,
