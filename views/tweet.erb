@@ -1,37 +1,33 @@
-<tr class="tweet">
-  <td class="tweet-profile-icon">
+<div class="tweet">
+  <div class="tweet-profile-icon">
     <img src="<%=h status.user.profile_image_url %>" />
-  </td>
-  <td class="tweet-content">
-    <table width="100%" height="100%">
-      <tr><td>
-	  <strong>
-	    <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
-	      <%=h status.user.screen_name %> 
-	    </a>
-	  </strong>
-	  <%=h status.user.name %>
-	  <br/>
-	  <%=tweet_filter status.text %>
-      </td></tr>
-      <tr>
-	<td class="tweet-footer">
-	  <% if location == "timeline" %>
-	  <form method="get" action="/timeline">
-	    <input type="hidden" name="reply_id" value="<%=h status.id_str %>" />
-	    <input type="hidden" name="reply_user" value="<%=h status.user.screen_name %>" />
-	    <a href="#" class="tweet-footer-item" onclick="this.parentNode.submit()">reply</a>
-	  </form>
-	  <% end %>
-	  <% if current_user and current_user.can_delete_status(status.id_str) %>
-	  <form method="post" action="/delete">
-	    <input type="hidden" name="id" value="<%=h status.id_str %>" />
-	    <input type="hidden" name="location" value="<%=h location %>" />
-	    <a href="#" class="tweet-footer-item" onclick="this.parentNode.submit()">delete</a>
-	  </form>
-	  <% end %>
-	</td></tr>
-    </table>
-  </td>
-</tr>
+  </div>
+  <div class="tweet-content">
+    <div>
+      <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
+	<strong><%=h status.user.screen_name %></strong>
+      </a>
+      <%=h status.user.name %>
+    </div>
+    <div>
+      <%=tweet_filter status.text %>
+    </div>
+    <div class="tweet-footer">
+      <% if location == "timeline" %>
+      <form method="get" action="/timeline" class="inline">
+	<input type="hidden" name="reply_id" value="<%=h status.id_str %>" />
+	<input type="hidden" name="reply_user" value="<%=h status.user.screen_name %>" />
+	<a href="#" class="tweet-footer-item" onclick="this.parentNode.submit()">reply</a>
+      </form>
+      <% end %>
+      <% if current_user and current_user.can_delete_status(status.id_str) %>
+      <form method="post" action="/delete" class="inline">
+	<input type="hidden" name="id" value="<%=h status.id_str %>" />
+	<input type="hidden" name="location" value="<%=h location %>" />
+	<a href="#" class="tweet-footer-item" onclick="this.parentNode.submit()">delete</a>
+      </form>
+      <% end %>
+    </div>
+  </div>
+</div>
 

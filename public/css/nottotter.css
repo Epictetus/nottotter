@@ -61,16 +61,18 @@ table.timeline {
 }
 
 .tweet {
-    height: 56px;
     border-bottom: 1px solid #eeeeee;
+    margin-top: 2px;
 }
 
 .tweet:hover {
     background: rgba(0, 153, 204, 0.15);
 }
 
-td.tweet-profile-icon {
+.tweet-profile-icon {
     width: 10%;
+    float: left;
+    padding: 4px;
     vertical-align: middle;
 }
 
@@ -79,7 +81,7 @@ td.tweet-profile-icon {
     vertical-align: middle;
 }
 
-td.tweet-footer {
+.tweet-footer {
     vertical-align: bottom;
 }
 

@@ -9,11 +9,9 @@
 </form>
 <p><%=h flash[:tweet_error] %></p>
 
-<table class="timeline">
 <% @timeline.each do |status| %>
 <%= tweet_tag status, "timeline" %>
 <% end %>
-</table>
 </div>
 <div class="grid_4">
   のっとっているユーザー
