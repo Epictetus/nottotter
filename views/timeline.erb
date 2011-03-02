@@ -9,7 +9,13 @@
 </form>
 <p><%=h flash[:tweet_error] %></p>
 
+<table class="timeline">
 <% @timeline.each do |status| %>
 <%= tweet_tag status, "timeline" %>
 <% end %>
+</table>
+</div>
+<div class="grid_4">
+  <img class="tweet-icon" src="<%=h current_hijacked_user.profile_image_url %>" />
+  <div class="tweet-name"><%=h current_hijacked_user.screen_name %></div>
 </div>

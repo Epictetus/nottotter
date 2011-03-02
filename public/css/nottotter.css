@@ -55,30 +55,30 @@ table.select-user .user {
     border-top: 1px solid #fafafa;
 }
 
-div.hijack-item {
-    margin: 10px;
+/* timeline */
+table.timeline {
+    width: 100%;
 }
 
-div.tweet-item {
-    margin: 10px;
+.tweet {
+    height: 56px;
+    border-bottom: 1px solid #eeeeee;
 }
 
-.tweet-icon {
-    float: left;
-    width: 48px;
+.tweet:hover {
+    background: rgba(0, 153, 204, 0.15);
+}
+
+td.tweet-profile-icon {
+    width: 10%;
+    vertical-align: middle;
+}
+
+.tweet-profile-icon img {
     height: 48px;
-    margin: 10px;
+    vertical-align: middle;
 }
 
-.tweet-content {
-    height: 64px;
-}
-
-.tweet-item form {
-    float: left;
-}
-
-.tweet-footer-item {
-    margin-left: 4px;
-    margin-right: 4px;
+td.tweet-footer {
+    vertical-align: bottom;
 }
