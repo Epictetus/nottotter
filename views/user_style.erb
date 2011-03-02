@@ -1,0 +1,15 @@
+<style> 
+body { 
+    background-color: <%=h user.profile_background_color %>;
+    background-image: url(<%=h user.profile_background_image_url %>);
+    background-repeat: <%=h user.profile_background_tile %>;
+}
+
+.tweet { 
+    color: <%=h user.profile_text_color %>; 
+}
+
+.tweet a { 
+    color: <%=h user.profile_link_color %>; 
+}
+</style>

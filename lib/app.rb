@@ -44,16 +44,8 @@ class NottotterApp < Sinatra::Base
       }
     end
 
-    def bg_user
-      @bg_user = (@bg_user and defined? @bg_user)? @bg_user : Model::User.admin_user
-    end
-    
-    def background_tag
-      erb :bg_style
-    end
-
-    def tweet_style_tag
-      erb :tweet_style
+    def user_style_tag(user = Model::User.admin_user)
+      erb :user_style, :locals => { :user => user }
     end
 
     def require_user
@@ -165,7 +157,6 @@ class NottotterApp < Sinatra::Base
 
   get "/nottori" do
     require_user
-    @bg_user = current_user
     @users = Model::User.recommends(current_user)
     erb :nottori
   end
@@ -191,7 +182,6 @@ class NottotterApp < Sinatra::Base
 
   get "/timeline" do
     require_hijack
-    @bg_user = current_hijacked_user
     @timeline = current_hijacked_user.timeline
     erb :timeline
   end
@@ -230,7 +220,6 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/history" do
-    @bg_user = current_user
     @history = Model::Hijack.history
     erb :history
   end
