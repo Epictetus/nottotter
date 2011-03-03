@@ -114,11 +114,15 @@ class NottotterApp < Sinatra::Base
       session[:request_secret]
       )
     
-    access_token = request_token.get_access_token(
-      {},
-      :oauth_token => params[:oauth_token],
-      :oauth_verifier => params[:oauth_verifier])
-    
+    begin
+      access_token = request_token.get_access_token(
+        {},
+        :oauth_token => params[:oauth_token],
+        :oauth_verifier => params[:oauth_verifier])
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
+      halt 401
+    end
     session.delete(:request_token)
     session.delete(:request_secret)
     
