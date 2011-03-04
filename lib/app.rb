@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'erb'
 require 'model'
-require 'rack/flash'
 
 class NottotterApp < Sinatra::Base
   def self.logger
@@ -94,7 +93,6 @@ class NottotterApp < Sinatra::Base
   end
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
-  use Rack::Flash
 
   get '/' do
     redirect '/timeline' if current_hijack

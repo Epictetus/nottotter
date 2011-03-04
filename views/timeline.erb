@@ -7,8 +7,7 @@
   <input type="submit" value="tweet" />
   <span class="indicator hidden">通信中</span>
 </form>
-<p><%=h flash[:tweet_error] %></p>
-
+<br />
 <% @timeline.each do |status| %>
 <%= tweet_tag status, "timeline" %>
 <% end %>
