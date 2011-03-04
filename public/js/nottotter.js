@@ -78,7 +78,7 @@ window.nottotter.reply = function(id, name) {
 }
 
 window.nottotter.deleteTweet = function(data, id) {
-    tweet = $(data).parent().parent().parent()
+    tweet = $('.tweet[value=' + id + ']');
     console.log(tweet);
     
     $.post(

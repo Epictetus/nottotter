@@ -63,18 +63,23 @@ table.timeline {
 }
 
 .tweet {
+    width: 100%;
+    margin-bottom: 0px;
+    border-top: 1px solid #eeeeee;
     border-bottom: 1px solid #eeeeee;
-    margin-top: 2px;
 }
 
 .tweet:hover {
     background: rgba(0, 153, 204, 0.15);
 }
 
+.tweet td {
+    padding: 0.5em 0em;
+}
+
 .tweet-profile-icon {
     width: 10%;
-    float: left;
-    padding: 4px;
+    text-align: center;
     vertical-align: middle;
 }
 
@@ -88,7 +93,7 @@ table.timeline {
 }
 
 .profile-item {
-    margin-bottom: 5px;
+    margin-bottom: 0.5em;
 }
 
 table.profile-item {
@@ -97,6 +102,5 @@ table.profile-item {
 
 .small-icon {
     width: 24px;
-    margin: 2px; 
     vertical-align: middle;
 }

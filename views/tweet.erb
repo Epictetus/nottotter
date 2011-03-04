@@ -1,26 +1,26 @@
-<div class="tweet">
-  <div class="tweet-profile-icon">
-    <img src="<%=h status.user.profile_image_url %>" />
-  </div>
-  <div class="tweet-content">
-    <div>
-      <a href="http://twitter.com/#!/<%=h status.user.screen_name %>">
-	<strong><%=h status.user.screen_name %></strong>
-      </a>
-      <%=h status.user.name %>
-    </div>
-    <div>
-      <%=tweet_filter status.text %>
-    </div>
-    <div class="tweet-footer">
-      <% if location == "timeline" %>
-      <a href="#" class="tweet-footer-item" 
-	 onclick="window.nottotter.reply('<%=h status.id_str %>', '<%=h status.user.screen_name %>')">reply</a>
-      <% end %>
-      <% if current_user and current_user.can_delete_status(status.id_str) %>
-      <a href="#" class="tweet-footer-item" onclick="window.nottotter.deleteTweet(this, '<%=h status.id_str %>')">delete</a>
-      <% end %>
-    </div>
-  </div>
-</div>
+<table class="tweet" value="<%= status.id_str %>">
+  <tr>
+    <td class="tweet-profile-icon">
+      <img src="<%=h status.user.profile_image_url %>" />
+    </td>
+    <td class="tweet-content">
+      <div>
+	<a target="_blank" href="http://twitter.com/#!/<%=h status.user.screen_name %>"><strong><%=h status.user.screen_name %></strong></a>
+	<%=h status.user.name %>
+      </div>
+      <div>
+	<%=tweet_filter status.text %>
+      </div>
+      <div class="tweet-footer">
+	<% if location == "timeline" %>
+	<a href="#" class="tweet-footer-item" 
+	   onclick="window.nottotter.reply('<%=h status.id_str %>', '<%=h status.user.screen_name %>')">reply</a>
+	<% end %>
+	<% if current_user and current_user.can_delete_status(status.id_str) %>
+	<a href="#" class="tweet-footer-item" onclick="window.nottotter.deleteTweet(this, '<%=h status.id_str %>')">delete</a>
+	<% end %>
+      </div>
+    </td>    
+  </tr>
+</table>
 
