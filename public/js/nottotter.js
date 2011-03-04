@@ -72,6 +72,11 @@ window.nottotter.timeline = {
     },
 };
 
+window.nottotter.reply = function(id, name) {
+    $('#post-tweet-reply-id').val(id);
+    $('#post-tweet-textarea').html('@' + name + ' ');
+}
+
 window.nottotter.dispatcher('/timeline', function() {
     window.nottotter.timeline.init();
 });
