@@ -18,11 +18,7 @@
 	 onclick="window.nottotter.reply('<%=h status.id_str %>', '<%=h status.user.screen_name %>')">reply</a>
       <% end %>
       <% if current_user and current_user.can_delete_status(status.id_str) %>
-      <form method="post" action="/delete" class="inline">
-	<input type="hidden" name="id" value="<%=h status.id_str %>" />
-	<input type="hidden" name="location" value="<%=h location %>" />
-	<a href="#" class="tweet-footer-item" onclick="this.parentNode.submit()">delete</a>
-      </form>
+      <a href="#" class="tweet-footer-item" onclick="window.nottotter.deleteTweet(this, '<%=h status.id_str %>')">delete</a>
       <% end %>
     </div>
   </div>

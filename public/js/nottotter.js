@@ -77,6 +77,19 @@ window.nottotter.reply = function(id, name) {
     $('#post-tweet-textarea').html('@' + name + ' ');
 }
 
+window.nottotter.deleteTweet = function(data, id) {
+    tweet = $(data).parent().parent().parent()
+    console.log(tweet);
+    
+    $.post(
+	'/delete', 
+	{ "id": id , "location": location.pathname },
+	function(res) {
+	    tweet.remove();
+	    return false;
+	});
+}
+
 window.nottotter.dispatcher('/timeline', function() {
     window.nottotter.timeline.init();
 });
