@@ -55,7 +55,20 @@ window.nottotter.timeline = {
     getTimeline: function() {
         var self = this;
         console.log('getTimeline');
-	$.get('/get_timeline', self.received);
+	$.ajax({
+		url: '/get_timeline',
+		    type: 'GET',
+		    success: function(res){
+		    self.received(res);
+		},
+		    error: function(res) {
+		    self.error(res);
+		},
+		    complete: function(res) {
+		    self.hideIndicator();
+		}
+	    })
+	self.showIndicator();
     },
     post: function() {
         var self = this;
@@ -107,11 +120,18 @@ window.nottotter.timeline = {
             if ($(this).attr('type') != 'submit') $('#post-tweet textarea').val('');
         });
     },
+    indicatorCount: 0,
     showIndicator: function() {
+	this.indicatorCount++;
         $('.indicator').show();
     },
     hideIndicator: function() {
-        $('.indicator').hide();
+	if(this.indicatorCount > 0){
+	    this.indicatorCount--;
+	}
+	if(this.indicatorCount == 0){
+	    $('.indicator').hide();
+	}
     },
     reply: function(id, name) {
         console.log(id, name);
