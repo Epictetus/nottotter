@@ -13,14 +13,14 @@
       </div>
       <div class="tweet-footer">
 	<% if location == "timeline" %>
-	<a href="#" class="tweet-footer-item" 
-	   onclick="window.nottotter.reply('<%=h status.id_str %>', '<%=h status.user.screen_name %>')">reply</a>
+	<a href="/timeline?reply_id=<%=h status.id_str %>" class="tweet-footer-item reply" data-status-id="<%=h status.id_str %>" data-screen-name="<%=h status.user.screen_name %>">reply</a>
+        
 	<% end %>
 	<% if current_user and current_user.can_delete_status(status.id_str) %>
-	<a href="#" class="tweet-footer-item" onclick="window.nottotter.deleteTweet(this, '<%=h status.id_str %>')">delete</a>
+	<a href="/timeline?delete_id=<%=h status.id_str %>" class="tweet-footer-item delete" data-status-id="<%=h status.id_str %>">delete</a>
 	<% end %>
       </div>
-    </td>    
+    </td>
   </tr>
 </table>
 

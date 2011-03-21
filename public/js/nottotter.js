@@ -1,4 +1,4 @@
-window.nottotter = {  };
+if (!window.nottotter) window.nottotter = {  };
 
 window.nottotter.dispatcher = function(guard, func) {
     window.nottotter.dispatcher.path_func = window.nottotter.dispatcher.path_func || []
@@ -19,6 +19,9 @@ window.nottotter.dispatcher = function(guard, func) {
 };
 
 window.nottotter.timeline = {
+    error: function(res) {
+        alert(res.status + ": " + res.responseText);
+    },
     init: function() {
         var self = this;
         console.log('init timeline');
@@ -34,6 +37,20 @@ window.nottotter.timeline = {
             self.post();
             return false;
         });
+        $('.tweet-footer-item.reply').live('click', function() {
+            var status_id = $(this).attr("data-status-id");
+            var screen_name = $(this).attr("data-screen-name");
+            self.reply(status_id, screen_name);
+            return false;
+        });
+
+        $('.tweet-footer-item.delete').live('click', function() {
+            var status_id = $(this).attr("data-status-id");
+            if (confirm('削除しますか？')) {
+                self.deleteTweet(status_id);
+            }
+            return false;
+        });
     },
     getTimeline: function() {
         var self = this;
@@ -43,10 +60,20 @@ window.nottotter.timeline = {
     post: function() {
         var self = this;
         console.log('post');
-        $.post('/timeline', $('#post-tweet').serialize(), function(res) {
-            self.hideIndicator();
-            self.unlockPostForm();
-            self.received(res);
+        $.ajax({
+            url: '/timeline',
+            data: $('#post-tweet').serialize(),
+            type: 'POST',
+            success: function(res) {
+                self.received(res);
+            },
+            error: function(res) {
+                self.error(res);
+            },
+            complete: function(res) {
+                self.hideIndicator();
+                self.unlockPostForm();
+            }
         });
         self.showIndicator();
         self.lockPostForm();
@@ -87,20 +114,24 @@ window.nottotter.timeline = {
         $('.indicator').hide();
     },
     reply: function(id, name) {
+        console.log(id, name);
         $('#post-tweet-reply-id').val(id);
-        $('#post-tweet-textarea').html('@' + name + ' ');
+        $('#post-tweet-textarea').text('@' + name + ' ').focus();
     },
-    deleteTweet:  function(data, id) {
-        tweet = $('.tweet[value=' + id + ']');
-        console.log(tweet);
+    deleteTweet:  function(id) {
+        var tweet = $('.tweet[data-value=' + id + ']');
 
-        $.post(
-	    '/delete', 
-	    { "id": id , "location": location.pathname },
-	    function(res) {
-	        tweet.remove();
-	        return false;
-	    });
+        $.ajax({
+            url: '/delete',
+            data: { "id": id , "location": location.pathname },
+            type: 'POST',
+            success: function(res) {
+                tweet.remove();
+            },
+            error: function(res) {
+                self.error(res);
+            }
+        });
     }
 };
 

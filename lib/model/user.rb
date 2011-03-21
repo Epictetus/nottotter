@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'rubytter'
+require 'digest/sha1'
 
 module Model
   class User
@@ -64,7 +65,11 @@ module Model
     end
 
     # --- instance method ---
-    
+
+    def token
+      Digest::SHA1.hexdigest(self.key + "aaaaa")
+    end
+
     def hash
       self.user_id.hash
     end

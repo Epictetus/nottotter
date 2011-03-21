@@ -104,3 +104,9 @@ table.profile-item {
     width: 24px;
     vertical-align: middle;
 }
+
+.hijack-user-profile {
+    border: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding: 3px;
+}
