@@ -14,8 +14,7 @@ class NottotterApp < Sinatra::Base
     alias_method :h, :escape_html
     
     def tweet_filter(text)
-      escape_html(text).gsub(/^[dD] /){
-      }.gsub(/@([\w_]+)/){ 
+      escape_html(text).gsub(/@([\w_]+)/){ 
         "<a href='http://twitter.com/#!/#{$1}'>@#{$1}</a>"
       }.gsub(/#([\w_]+)/){
         "<a href='http://twitter.com/#!/search?q=%23#{$1}'>##{$1}</a>"
@@ -260,7 +259,9 @@ class NottotterApp < Sinatra::Base
     end
     
     error_message = false
-    tweet = params[:tweet] + " #nottotterJP"
+    tweet = params[:tweet].gsub(/^[dD] /, "")
+    tweet = tweet + " #nottotterJP"
+
     begin
       current_hijack.tweet tweet, tweet_params
     rescue => error
