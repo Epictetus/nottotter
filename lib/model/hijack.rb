@@ -148,7 +148,7 @@ module Model
       begin
         status_id = status_id.to_s
         Model.logger.warn "delete status #{status_id}"
-        to_user.rubytter.remove_status(status_id)
+        to_user.rubytter{|r| r.remove_status(status_id) }
         self.class.collection.update({'tweets.id_str' => status_id}, {:$set => {'tweets.$.deleted' => 1}})
       rescue => error
         Model.logger.warn "#{error.class}: #{error.message}"

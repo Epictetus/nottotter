@@ -5,14 +5,6 @@ require 'digest/sha1'
 module Model
   class User
 
-    class OAuthRevoked < Exception
-      attr_reader :user
-      def initialize(msg, user = nil)
-        super(msg)
-        @user = user
-      end
-    end
-
     # --- class method ---
     
     def self.all
@@ -133,24 +125,47 @@ module Model
     # --- twitter ---
 
     def verify_credentials
-      @verify_credentials ||= self.rubytter.verify_credentials
-    rescue => error
-      raise Model::User::OAuthRevoked.new(error.message, self)
+      self.rubytter{|r| r.verify_credentials }
+    end
+
+    class OAuthRevoked < Exception
+      attr_reader :user
+      def initialize(msg, user = nil)
+        super(msg)
+        @user = user
+      end
     end
 
     def rubytter                # returns rubytter instance
-      return @rubytter if @rubytter
+      unless @rubytter
+        consumer = Model::Twitter.consumer
+        access_token = Model::Twitter.access_token(consumer, self.access_token, self.access_secret)
+        @rubytter = OAuthRubytter.new(access_token)
+      end
 
-      consumer = Model::Twitter.consumer
-      access_token = Model::Twitter.access_token(consumer, self.access_token, self.access_secret)
-      @rubytter = OAuthRubytter.new(access_token)
+      if block_given?
+        begin
+          yield @rubytter
+        rescue Rubytter::APIError => error
+          Model.logger.warn error.message
+          if error.message == "Could not authenticate with OAuth."
+            raise OAuthRevoked.new(error.message, self)
+          else
+            raise error
+          end
+        end
+      else
+        @rubytter
+      end
     end
 
     def profile
       @profile ||= Model::Cache.get_or_set("profile-#{self.user_id}") {
         Model.logger.info "get user profile #{self.screen_name}"
         begin
-          self.rubytter.user(self.screen_name).to_hash
+          self.rubytter{|r|
+            r.user(self.screen_name)
+          }.to_hash
         rescue
           {}
         end
@@ -163,7 +178,9 @@ module Model
         Model.logger.info "skip because NO_TWEET mode"
         'ok'
       else
-        rubytter.update(status, options).to_hash unless ENV['NO_TWEET']
+        rubytter{|r|
+          r.update(status, options)
+        }.to_hash unless ENV['NO_TWEET']
       end
     end
 
@@ -172,7 +189,9 @@ module Model
       if ENV['NO_TWEET']
         Model.logger.info "skip because NO_TWEET mode"
       else
-        rubytter.send_direct_message(params)
+        rubytter{|r|
+          r.send_direct_message(params)
+        }
       end
     end
 
@@ -225,7 +244,9 @@ module Model
     def friends_ids
       @friends_ids ||= Model::Cache.get_or_set("friend_ids-#{self.user_id}", 3600) { # 同時に動かないから固定，friend増える可能性あるので少し短かめ
         Model.logger.info "get friend ids #{self.screen_name}"
-        self.rubytter.friends_ids(self.user_id)
+        self.rubytter{|r|
+          r.friends_ids(self.user_id)
+        }
       }
     end
 
@@ -237,7 +258,7 @@ module Model
       return @timeline if @timeline
       @timeline ||= Model::Cache.get_or_set("timeline-#{self.user_id}", 30) {
         Model.logger.info "get timeline #{self.screen_name}"
-        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash})
+        protected_filter(self.rubytter{|r| r.friends_timeline}.map{|status| status.to_hash})
       }.map{|status|
         Model::ActiveRubytter.new(status)
       }
@@ -247,7 +268,7 @@ module Model
       return @refreshed if @refreshed
       @refreshed ||= Model::Cache.force_set(
         "timeline-#{self.user_id}",
-        protected_filter(self.rubytter.friends_timeline.map{|status| status.to_hash}
+        protected_filter(self.rubytter{|r| r.friends_timeline}.map{|status| status.to_hash}
           ),
         30
         )

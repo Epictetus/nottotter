@@ -58,7 +58,6 @@ class NottotterApp < Sinatra::Base
 
     def require_user
       current_user or redirect '/'
-      current_user.verify_credentials
     end
 
     def require_token
@@ -69,7 +68,6 @@ class NottotterApp < Sinatra::Base
     def require_hijack
       expired_hijack and redirect '/timeout'
       current_hijack or redirect '/'
-      current_hijack.verify_credentials
     end
 
     def current_user
@@ -95,7 +93,6 @@ class NottotterApp < Sinatra::Base
 
     def require_expired_hijack
       expired_hijack or redirect '/'
-      expired_hijack.verify_credentials
     end
 
     def expired_hijack
@@ -122,6 +119,12 @@ class NottotterApp < Sinatra::Base
       hijack = current_hijack || expired_hijack
       hijack.close!
       redirect "/nottori/#{error.user.screen_name}"
+    end
+  end
+
+  before do
+    if request.request_method == "POST"
+      current_user.verify_credentials if current_user
     end
   end
 
