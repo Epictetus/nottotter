@@ -16,7 +16,7 @@ module Model
     # --- class method ---
     
     def self.all
-      self.collection.find.map{|user|
+      self.collection.find({:open => true}).map{|user|
         self.new(user)
       }
     end
@@ -60,6 +60,7 @@ module Model
       self.new_from_user_id(data[:user_id])
     end
 
+
     def self.remove(user)
       raise "#user must be kind of Model::User" unless user.kind_of? Model::User
       self.collection.remove({:user_id => user.user_id})
@@ -74,9 +75,21 @@ module Model
     end
 
     # --- instance method ---
+    def _id
+      @data['_id']
+    end
+
+    def update(params)
+      self.class.collection.update({:_id => self._id}, params)
+    end
 
     def token
       Digest::SHA1.hexdigest(self.key + "aaaaa")
+    end
+   
+    def close!
+      self.update(:$set => {:open => false})
+      @data['open'] = false
     end
 
     def hash

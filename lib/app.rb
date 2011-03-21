@@ -111,9 +111,9 @@ class NottotterApp < Sinatra::Base
 
   error Model::User::OAuthRevoked do
     error = request.env['sinatra.error']
-
+    error.user.close!
     session.delete(:user_id) if error.user.screen_name == current_user.screen_name
-
+    
     halt 401, error.user.screen_name if request.xhr?
 
     if error.user.screen_name == current_user.screen_name
@@ -164,7 +164,8 @@ class NottotterApp < Sinatra::Base
         :user_id => access_token.params[:user_id],
         :access_token => access_token.params[:oauth_token],
         :access_secret => access_token.params[:oauth_token_secret],
-        :screen_name => access_token.params[:screen_name]
+        :screen_name => access_token.params[:screen_name],
+        :open => true
       })
     
     if user.admin_user?
