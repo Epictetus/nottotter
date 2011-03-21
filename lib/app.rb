@@ -134,7 +134,8 @@ class NottotterApp < Sinatra::Base
 
   error do
     status 500
-    'sorry... ' + request.env['sinatra.error'].message
+    Model.logger.warn request.env['sinatra.error'].message
+    'sorry... '
   end
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
