@@ -141,7 +141,9 @@ window.nottotter.timeline = {
     deleteTweet:  function(id) {
         var self = this;
         var tweet = $('.tweet[data-value=' + id + ']');
+        if (!tweeet) return;
 
+        self.showIndicator();
         $.ajax({
             url: '/delete',
             data: {
@@ -154,7 +156,10 @@ window.nottotter.timeline = {
             },
             error: function(res) {
                 self.error(res);
-            }
+            },
+            complete: function(res) {
+		self.hideIndicator();
+	    }
         });
     }
 };
