@@ -18,8 +18,8 @@
     $.fn.charCount = function(options){
 	// default configuration properties
 	var defaults = {	
-	    allowed: 140,		
-	    warning: 25,
+	    allowed: 120,		
+	    warning: 20,
 	    css: 'counter',
 	    counterElement: 'span',
 	    cssWarning: 'warning',
@@ -30,8 +30,10 @@
 	var options = $.extend(defaults, options); 
 		
 	function calculate(obj){
+	    obj.value = obj.value.substr(0, options.allowed);
 	    var count = $(obj).val().length;
 	    var available = options.allowed - count;
+	    
 	    if(available <= options.warning && available >= 0){
 		$(obj).next().addClass(options.cssWarning);
 	    } else {
@@ -48,10 +50,10 @@
 	this.each(function() {  			
 		$(this).after('<'+ options.counterElement +' class="' + options.css + '">'+ options.counterText +'</'+ options.counterElement +'>');
 		calculate(this);
-		//$(this).focus(function(){calculate(this)});
-		$(this).keypress(function(){calculate(this)});
-		$(this).keyup(function(){calculate(this)});
-		$(this).change(function(){calculate(this)});
+		$(this).keypress(function(){calculate(this);});
+		$(this).keyup(function(){calculate(this);});
+		$(this).keydown(function(){calculate(this);});
+		$(this).change(function(){calculate(this);});
 	    });
 	  
     };
