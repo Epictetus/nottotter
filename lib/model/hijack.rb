@@ -210,7 +210,7 @@ module Model
         status = "1回目"
       end
 
-      [Model::User::ADMIN_USER, to_user].each{|user|
+      [to_user, Model::User::ADMIN_USER].each{|user|
         user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました. (#{status}) #nottotterJP"
       }
     rescue => error
@@ -227,7 +227,7 @@ module Model
     end
 
     def notice_close
-      [Model::User::ADMIN_USER, to_user].select{|user| user.open? }.each{|user|
+      [to_user, Model::User::ADMIN_USER].select{|user| user.open? }.each{|user|
         user.tweet "@#{from_user.screen_name} さんによる @#{to_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
       }
     rescue => error
