@@ -75,6 +75,8 @@ class NottotterApp < Sinatra::Base
       return unless session[:user_id]
 
       @current_user = Model::User.new_from_user_id(session[:user_id])
+      @current_user = nil unless @current_user.open?
+      @current_user
     end
 
     def current_hijack
