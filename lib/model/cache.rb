@@ -1,6 +1,5 @@
 gem 'dalli'
 require 'dalli'
-Dalli::Client.new('127.0.0.1:11211').stats
 
 module Model
   module Cache
