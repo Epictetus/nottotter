@@ -119,6 +119,8 @@ class NottotterApp < Sinatra::Base
     if error.user.screen_name == current_user.screen_name
       redirect "/revoked"
     else
+      hijack = current_hijack || expired_hijack
+      hijack.close!
       redirect "/nottori/#{error.user.screen_name}"
     end
   end

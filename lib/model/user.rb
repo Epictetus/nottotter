@@ -39,7 +39,7 @@ module Model
     end
 
     def self.new_from_screen_name(screen_name)
-      data = self.collection.find_one({:screen_name => screen_name})
+      data = self.collection.find_one({:screen_name => screen_name, :open => true})
       return nil unless data
       self.new(data)
     end
@@ -127,6 +127,9 @@ module Model
       @data['access_secret']
     end
 
+    def open?
+      @data['open']
+    end
     # --- twitter ---
 
     def verify_credentials
@@ -176,6 +179,7 @@ module Model
     def can_delete_status(status_id)
       hijack = Model::Hijack.new_from_status_id(status_id.to_s)
       return false unless hijack
+      return false unless hijack.to_user.open?
       hijack.any_user?(self)
     end
 
