@@ -244,7 +244,7 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/history" do
-    @history = Model::Hijack.history
+    @history = Model::Hijack.history.select{ |h| h.avail_tweets.length > 0 }
     erb :history
   end
 
