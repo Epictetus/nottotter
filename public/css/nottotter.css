@@ -115,6 +115,28 @@ table.profile-item {
     padding: 3px;
 }
 
+.remain-time-container {
+    border: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding: 3px;
+}
+
+.remain-time-container {
+    border: 1px solid #dddddd;
+    margin-bottom: 10px;
+    padding: 3px;
+}
+
+.remain-time {
+    font-size: 30px;
+    text-align: center;
+}
+
+.remain-time.red {
+    font-size: 40px;
+    color: red;
+    font-weight: bold;
+}
 .counter {
     color: gray;
     font-size: 12pt;

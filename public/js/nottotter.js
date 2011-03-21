@@ -18,6 +18,57 @@ window.nottotter.dispatcher = function(guard, func) {
     });
 };
 
+window.nottotter.countdown = {
+    init: function() {
+        var self = this;
+        if (self.timer) return;
+        if (!self.expire_at) return;
+        self.counter = 0;
+        self.timer = setInterval(function() {
+            self.observe();
+        }, 500);
+    },
+    stop: function() {
+        var self = this;
+        clearInterval(self.timer);
+    },
+    observe: function() {
+        var self = this;
+        var remain_sec = (self.expire_at - Date.now()) / 1000;
+        if (remain_sec < 60) {
+            $(".remain-time").addClass("red");
+        }
+        if (remain_sec < 0) {
+            self.stop();
+            self.callback();
+            return;
+        }
+        self.counter++;
+        self.view(remain_sec);
+    },
+    view: function(time) {
+        var self = this;
+        var min = Math.floor(time / 60);
+
+        var sec = Math.floor(time % 60);
+        if (sec < 10) sec = "0" + sec;
+
+        $(".remain-time-minute").text(min);
+        $(".remain-time-middle").css("visibility", self.counter % 2 == 0 ? "visible" : "hidden");
+        $(".remain-time-sec").text(sec);
+        $(".remain-time").css("visibility", "visible");
+    },
+    set: function(time) {
+        var self = this;
+        self.expire_at = time;
+    },
+    callback: function() {
+        location.href = '/timeout';
+    },
+    expire_at: null,
+    counter: null,
+};
+
 window.nottotter.timeline = {
     error: function(res) {
         if (res.status == 0) return;

@@ -1,4 +1,11 @@
 <%= user_style_tag current_hijacked_user %>
+<script language="javascript" type="text/javascript" >
+ window.nottotter.dispatcher('/timeline', function() {
+    window.nottotter.countdown.set(<%=h current_hijack.finish_on_milliseconds %>);
+    window.nottotter.countdown.init();
+});
+
+</script>
 <div class="grid_8">
   <form id="post-tweet">
     <input type="hidden" name="token" value="<%=h current_user.token %>"></input>
@@ -18,5 +25,11 @@
 <div class="grid_4">
   のっとり中
   <%= user_profile_tag current_hijacked_user %>
+
+  <div class="remain-time-container">
+    <div>残り時間</div>
+    <div class="remain-time" style="visibility: hidden;"><span class="remain-time-minute">00</span><span class="remain-time-middle">:</span><span class="remain-time-sec">00</span></div>
+  </div>
+
   <%= erb :widget %>
 </div>

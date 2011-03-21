@@ -150,6 +150,10 @@ module Model
       end
     end
 
+    def finish_on_milliseconds
+      finish_on.to_i * 1000
+    end
+
     def remain_seconds
       finish_on - Time.now
     end
