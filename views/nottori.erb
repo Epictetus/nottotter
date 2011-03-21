@@ -1,7 +1,7 @@
 <%= user_style_tag current_user %>
 <div class="grid_8">
   <% if @users.length > 1 %>
-  <p>のっとるユーザーを選んでください．</p>
+  <p>のっとるユーザーを選んでください．/nottori/(ユーザー名) というURLから，特定のユーザーをのっとることもできます．</p>
   <% end %>
   <table class="select-user" width="100%">
     <% @users.each do |user| %>
