@@ -211,7 +211,7 @@ module Model
       end
 
       [Model::User::ADMIN_USER, to_user].each{|user|
-        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りましたl. (#{status}) #nottotterJP"
+        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました. (#{status}) #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
@@ -220,7 +220,7 @@ module Model
     def notice_start_dm
       to_user.send_direct_message(
         :user => to_user.user_id,
-        :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{to_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.com/nottori/#{to_user.screen_name} #{Model::AAMaker.make}"
+        :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{from_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.jp/nottori/#{to_user.screen_name} #{Model::AAMaker.make}"
         )
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
@@ -228,7 +228,7 @@ module Model
 
     def notice_close
       [Model::User::ADMIN_USER, to_user].each{|user|
-        user.tweet "@#{from_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
+        user.tweet "@#{from_user.screen_name} さんによる @#{to_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
