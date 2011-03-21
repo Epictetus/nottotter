@@ -15,6 +15,13 @@
     <div id="contain-all" class="container_12">
       <h1 class="grid_8"><a href="/">のっとったー</a></h1>
       <% if current_user %>
+      <script language="javascript" type="text/javascript" >
+        if (!window.nottotter) window.nottotter = {  };
+        window.nottotter.user = {
+          screen_name: "<%=h current_user.screen_name %>",
+          token: "<%=h current_user.token %>"
+        };
+      </script>
       <div class="grid_4">
         <p>
           <%=h current_user.screen_name %>さんこんにちは，
