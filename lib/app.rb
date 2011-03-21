@@ -235,7 +235,7 @@ class NottotterApp < Sinatra::Base
       require_user
       halt 400 unless params[:id]
       current_user.delete_status(params[:id])
-      redirect params[:location] || '/'
+      "ok"
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
       halt 400
