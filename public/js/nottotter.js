@@ -172,6 +172,7 @@ window.nottotter.timeline = {
 
 window.nottotter.dispatcher('/timeline', function() {
     window.nottotter.timeline.init();
+    $('#post-tweet-textarea').charCount();
 });
 
 window.nottotter.timeout = {
