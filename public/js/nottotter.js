@@ -78,7 +78,6 @@ window.nottotter.timeline = {
     },
     init: function() {
         var self = this;
-        console.log('init timeline');
         self.timer = setInterval(function() {
             self.getTimeline();
         }, 10000);
@@ -112,7 +111,6 @@ window.nottotter.timeline = {
     },
     getTimeline: function() {
         var self = this;
-        console.log('getTimeline');
         if (self.indicatorCount > 0) return;
 	$.ajax({
 		url: '/get_timeline',
@@ -131,7 +129,6 @@ window.nottotter.timeline = {
     },
     post: function() {
         var self = this;
-        console.log('post');
         $.ajax({
             url: '/timeline',
             data: $('#post-tweet').serialize(),
@@ -197,7 +194,6 @@ window.nottotter.timeline = {
 	}
     },
     reply: function(id, name) {
-        console.log(id, name);
         $('#post-tweet-reply-id').val(id);
         $('#post-tweet-textarea').val('@' + name + ' ').focus();
     },
@@ -235,9 +231,7 @@ window.nottotter.dispatcher('/timeline', function() {
 
 window.nottotter.timeout = {
     'timeout': function() {
-	$.post('/timeout', {}, function(res){
-		//console.log(res);
-	    });
+	$.post('/timeout');
     }
 };
 
