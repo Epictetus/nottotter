@@ -95,7 +95,7 @@ module Model
         query[:to_user_id] = to_user.user_id if to_user
       end
 
-      self.collection.find(query, {:sort => [:start_on, :desc]}).to_a.map{|found|
+      self.collection.find(query, {:sort => [:start_on, :desc]}).limit(100).to_a.map{|found|
         self.new(found)
       }
     end
