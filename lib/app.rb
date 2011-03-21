@@ -7,7 +7,7 @@ require 'model'
 
 class NottotterApp < Sinatra::Base
   def self.logger
-    @logger ||= Logger.new($stdout)
+    @logger ||= Logger.new($stderr)
   end
 
   helpers do
@@ -107,6 +107,7 @@ class NottotterApp < Sinatra::Base
   end
 
   set :show_exceptions, false
+  set :logging, true
 
   error Model::User::OAuthRevoked do
     error = request.env['sinatra.error']
