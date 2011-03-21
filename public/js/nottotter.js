@@ -113,6 +113,7 @@ window.nottotter.timeline = {
     getTimeline: function() {
         var self = this;
         console.log('getTimeline');
+        if (self.indicatorCount > 0) return;
 	$.ajax({
 		url: '/get_timeline',
 		    type: 'GET',
