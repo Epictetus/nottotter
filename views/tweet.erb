@@ -1,10 +1,23 @@
 <table class="tweet" data-value="<%= status.id_str %>">
   <tr>
-    <td class="tweet-profile-icon">
-      <img src="<%=h status.user.profile_image_url %>" />
+    <td class="tweet-profile-icon<% if hijacked_from %> hijacked<% end %>">
+      <% if hijacked_from %>
+      <a target="_blank" href="http://twitter.com/#!/<%=h hijacked_from.screen_name %>">
+        <img src="<%=h hijacked_from.profile_image_url %>" title="<%=h hijacked_from.screen_name %>"/>
+      </a>
+      →
+      <% end %>
+      <a target="_blank" href="http://twitter.com/#!/<%=h status.user.screen_name %>">
+        <img src="<%=h status.user.profile_image_url %>" title="<%=h status.user.screen_name %>" />
+      </a>
     </td>
+
     <td class="tweet-content">
       <div>
+        <% if hijacked_from %>
+        <a target="_blank" href="http://twitter.com/#!/<%=h hijacked_from.screen_name %>"><strong><%=h hijacked_from.screen_name %></strong></a>
+        →
+        <% end %>
 	<a target="_blank" href="http://twitter.com/#!/<%=h status.user.screen_name %>"><strong><%=h status.user.screen_name %></strong></a>
 	<%=h status.user.name %>
       </div>

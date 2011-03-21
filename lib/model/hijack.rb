@@ -129,8 +129,12 @@ module Model
       @data['finish_on']
     end
 
+    def avail_tweets
+      tweets.delete_if{|s| s.deleted }
+    end
+
     def tweets
-      (@data['tweets'] || []).map{|status|
+      @tweets ||= (@data['tweets'] || []).map{|status|
         Model::ActiveRubytter.new(status)
       }
     end

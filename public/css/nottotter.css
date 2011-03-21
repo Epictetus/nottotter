@@ -83,6 +83,10 @@ table.timeline {
     vertical-align: middle;
 }
 
+.tweet-profile-icon.hijacked {
+    width: 25%;
+}
+
 .tweet-profile-icon img {
     height: 48px;
     vertical-align: middle;

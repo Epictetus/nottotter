@@ -1,15 +1,16 @@
 <%=user_style_tag current_user %>
 <div class="grid_8">
   <% @history.each do |hijack| %>
+  <% if hijack.avail_tweets.length > 0 %>
   <div class="hijack-item">
-    <div><%=h hijack.start_on %> <%=h hijack.from_user.screen_name %>→<%=h hijack.to_user.screen_name %></div>
-    <% hijack.tweets.each do |status| %>
-    <% next if status.deleted %>
-    <%= tweet_tag status, "history" %>
+    <div><%=h ymd(hijack.start_on) %>，<%=h hijack.avail_tweets.length %>回投稿．</div>
+    <% hijack.avail_tweets.each do |status| %>
+    <%= tweet_tag status, "history", hijack.from_user %>
     <% end %>
     <hr />
   </div>
-  <% end %>
+  <% end #if %>
+  <% end #each %>
 </div>
 <div class="grid_4">
   <%= erb :widget %>

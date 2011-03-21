@@ -21,11 +21,16 @@ class NottotterApp < Sinatra::Base
       }
     end
     
-    def tweet_tag(status, location)
+    def tweet_tag(status, location = nil, hijacked_from = nil)
       erb :tweet, :locals => { 
         :status => status, 
-        :location => location
+        :location => location,
+        :hijacked_from => hijacked_from
       }
+    end
+
+    def ymd(time)
+      time.strftime('%Y年%m月%d日')
     end
     
     def icon_list_tag(users, count = 7)
