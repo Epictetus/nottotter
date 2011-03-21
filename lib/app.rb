@@ -223,8 +223,9 @@ class NottotterApp < Sinatra::Base
     end
     
     error_message = false
+    tweet = params[:tweet] + " #nottotterJP"
     begin
-      current_hijack.tweet params[:tweet], tweet_params
+      current_hijack.tweet tweet, tweet_params
     rescue => error
       error_message = "投稿に失敗しました。"
       Model.logger.warn "#{error.class}: #{error.message}"
