@@ -133,8 +133,8 @@ window.nottotter.timeline = {
             url: '/timeline',
             data: $('#post-tweet').serialize(),
             type: 'POST',
-            success: function(res) {
-                self.received(res);
+	    success: function(data, type, res) {
+		    self.received(res);
             },
             error: function(res) {
                 self.error(res);
