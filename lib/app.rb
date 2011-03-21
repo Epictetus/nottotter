@@ -162,9 +162,14 @@ class NottotterApp < Sinatra::Base
   end
 
   get '/timeout' do
-    require_expired_hijack
-    expired_hijack.close!
     erb :timeout
+  end
+
+  post '/timeout' do
+    hijack = current_hijack or expired_hijack
+    hijack or halt 400
+    hijack.close!
+    'OK'
   end
 
   get"/nottori/" do

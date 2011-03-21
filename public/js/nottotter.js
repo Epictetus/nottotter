@@ -92,6 +92,10 @@ window.nottotter.timeline = {
         self.lockPostForm();
     },
     received: function(data) {
+	if(data.status != 200){
+	    location.href = '/timeout';
+	    return;
+	}
 	var currents = $('.tweet');
 	var updates = $(data).find('.tweet');
 	var diff = [];
@@ -167,6 +171,18 @@ window.nottotter.timeline = {
 
 window.nottotter.dispatcher('/timeline', function() {
     window.nottotter.timeline.init();
+});
+
+window.nottotter.timeout = {
+    'timeout': function() {
+	$.post('/timeout', {}, function(res){
+		//console.log(res);
+	    });
+    }
+};
+
+window.nottotter.dispatcher('/timeout', function() {
+	window.nottotter.timeout.timeout();
 });
 
 $(function() {
