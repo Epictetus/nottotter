@@ -145,3 +145,16 @@ table.profile-item {
 .exceeded {
     color: red;
 }
+
+.howtouse {
+    margin-top: 2em;
+}
+
+dl.qa dt {
+    margin-left: 1em;
+}
+
+dl.qa dd {
+    margin-left: 2em;
+    margin-bottom: 1em;
+}
