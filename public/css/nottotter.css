@@ -141,3 +141,7 @@ table.profile-item {
     color: gray;
     font-size: 12pt;
 }
+
+.exceeded {
+    color: red;
+}
