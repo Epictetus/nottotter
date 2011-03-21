@@ -261,7 +261,4 @@ class NottotterApp < Sinatra::Base
     end
   end
 
-
-
-  logger.warn "env NO_TWEET is not set. Tweets will be posted." unless ENV['NO_TWEET']
 end
