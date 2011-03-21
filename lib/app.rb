@@ -14,7 +14,7 @@ class NottotterApp < Sinatra::Base
     alias_method :h, :escape_html
     
     def tweet_filter(text)
-      escape_html(text).gsub(/^d /){
+      escape_html(text).gsub(/^[dD] /){
       }.gsub(/@([\w_]+)/){ 
         "<a href='http://twitter.com/#!/#{$1}'>@#{$1}</a>"
       }.gsub(/#([\w_]+)/){
