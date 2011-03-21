@@ -6,7 +6,7 @@
     <textarea id="post-tweet-textarea" name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
     <br />
     <input type="submit" value="tweet" />
-    <span class="indicator hidden">通信中</span>
+    <span class="indicator hidden"><img src="/img/ajax.gif" style="vertical-align: middle;"></span>
   </form>
   <br />
   <div id="timeline">
