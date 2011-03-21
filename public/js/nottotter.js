@@ -63,6 +63,8 @@ window.nottotter.countdown = {
         self.expire_at = time;
     },
     callback: function() {
+        window.nottotter.timeline.lockPostForm();
+        window.nottotter.timeline.stop();
         location.href = '/timeout';
     },
     expire_at: null,
@@ -77,11 +79,15 @@ window.nottotter.timeline = {
     init: function() {
         var self = this;
         console.log('init timeline');
-        setInterval(function() {
+        self.timer = setInterval(function() {
             self.getTimeline();
         }, 10000);
 
         self.bindEvents();
+    },
+    stop: function() {
+        var self = this;
+        clearInterval(self.timer);
     },
     bindEvents: function() {
         var self = this;
