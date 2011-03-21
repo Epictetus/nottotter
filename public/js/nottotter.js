@@ -113,6 +113,7 @@ window.nottotter.timeline = {
             var status_id = $(this).attr("data-status-id");
             if (confirm('削除しますか？')) {
                 self.deleteTweet(status_id);
+                $(this).remove();
             }
             return false;
         });
@@ -208,7 +209,7 @@ window.nottotter.timeline = {
     deleteTweet:  function(id) {
         var self = this;
         var tweet = $('.tweet[data-value=' + id + ']');
-        if (!tweeet) return;
+        if (!tweet) return;
 
         self.showIndicator();
         $.ajax({
@@ -245,6 +246,19 @@ window.nottotter.timeout = {
 
 window.nottotter.dispatcher('/timeout', function() {
 	window.nottotter.timeout.timeout();
+});
+
+window.nottotter.dispatcher('/history', function() {
+    // XXXXXXXXXXX
+    var self = window.nottotter.timeline;
+    $('.tweet-footer-item.delete').live('click', function() {
+        var status_id = $(this).attr("data-status-id");
+        if (confirm('削除しますか？')) {
+            self.deleteTweet(status_id);
+            $(this).remove();
+        }
+        return false;
+    });
 });
 
 $(function() {
