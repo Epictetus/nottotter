@@ -166,7 +166,7 @@ class NottotterApp < Sinatra::Base
   end
 
   post '/timeout' do
-    hijack = current_hijack or expired_hijack
+    hijack = current_hijack || expired_hijack
     hijack or halt 400
     hijack.close!
     'OK'
