@@ -111,6 +111,10 @@ class NottotterApp < Sinatra::Base
   error Model::User::OAuthRevoked do
     error = request.env['sinatra.error']
     error.user.close!
+
+    hijack = current_hijack || expired_hijack
+    hijack.close!
+
     session.delete(:user_id) if error.user.screen_name == current_user.screen_name
     
     halt 401, error.user.screen_name if request.xhr?
@@ -118,8 +122,6 @@ class NottotterApp < Sinatra::Base
     if error.user.screen_name == current_user.screen_name
       redirect "/revoked"
     else
-      hijack = current_hijack || expired_hijack
-      hijack.close!
       redirect "/nottori/#{error.user.screen_name}"
     end
   end
