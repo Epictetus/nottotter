@@ -21,7 +21,7 @@ module Model
         score = rand
         score += 1.0 if from_user.friends_ids.include? user.user_id.to_i
         score
-      }.reverse
+      }.reverse[0..20]
     end
 
     def self.new_from_user_id(user_id)
