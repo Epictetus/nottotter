@@ -199,7 +199,7 @@ window.nottotter.timeline = {
     reply: function(id, name) {
         console.log(id, name);
         $('#post-tweet-reply-id').val(id);
-        $('#post-tweet-textarea').text('@' + name + ' ').focus();
+        $('#post-tweet-textarea').val('@' + name + ' ').focus();
     },
     deleteTweet:  function(id) {
         var self = this;
