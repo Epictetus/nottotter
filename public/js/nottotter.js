@@ -119,11 +119,15 @@ window.nottotter.timeline = {
         $('#post-tweet-textarea').text('@' + name + ' ').focus();
     },
     deleteTweet:  function(id) {
+        var self = this;
         var tweet = $('.tweet[data-value=' + id + ']');
 
         $.ajax({
             url: '/delete',
-            data: { "id": id , "location": location.pathname },
+            data: {
+                id: id,
+                token: window.nottotter.user.token,
+            },
             type: 'POST',
             success: function(res) {
                 tweet.remove();
