@@ -38,7 +38,7 @@ window.nottotter.timeline = {
     getTimeline: function() {
         var self = this;
         console.log('getTimeline');
-        $.getJSON('/timeline.json', self.received);
+	$.get('/get_timeline', self.received);
     },
     post: function() {
         var self = this;
@@ -52,8 +52,24 @@ window.nottotter.timeline = {
         self.lockPostForm();
     },
     received: function(data) {
-        console.log('got');
-        console.log(data);
+	var currents = $('.tweet');
+	var updates = $(data).find('.tweet');
+	var diff = [];
+	$.each(updates, function(index, value){
+		var nid = value.getAttribute('data-value');
+		var flag = true;
+		$.each(currents, function(index2, tweet){
+			var oid = tweet.getAttribute('data-value');
+			if(nid === oid){
+			    flag = false;
+			    return;
+			}
+		    });
+		if(flag){
+		    diff.push(value);
+		}
+	    });
+	$('#timeline').prepend($(diff));
     },
     lockPostForm: function() {
         $('#post-tweet input, #post-tweet textarea').each(function() { $(this).attr('disabled', true) });

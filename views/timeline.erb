@@ -1,16 +1,18 @@
 <%= user_style_tag current_hijacked_user %>
 <div class="grid_8">
-<form id="post-tweet">
-  <input id="post-tweet-reply-id" type="hidden" name="reply_id" value="<%=h params[:reply_id] %>" />
-  <textarea id="post-tweet-textarea" name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
+  <form id="post-tweet">
+    <input id="post-tweet-reply-id" type="hidden" name="reply_id" value="<%=h params[:reply_id] %>" />
+    <textarea id="post-tweet-textarea" name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
+    <br />
+    <input type="submit" value="tweet" />
+    <span class="indicator hidden">通信中</span>
+  </form>
   <br />
-  <input type="submit" value="tweet" />
-  <span class="indicator hidden">通信中</span>
-</form>
-<br />
-<% @timeline.each do |status| %>
-<%= tweet_tag status, "timeline" %>
-<% end %>
+  <div id="timeline">
+    <% @timeline.each do |status| %>
+    <%= tweet_tag status, "timeline" %>
+    <% end %>
+  </div>
 </div>
 <div class="grid_4">
   あなたのステータス

@@ -192,6 +192,11 @@ class NottotterApp < Sinatra::Base
     erb :timeline
   end
   
+  get "/get_timeline" do
+    require_hijack
+    erb :get_timeline
+  end
+
   post "/timeline" do
     require_hijack
     tweet_params = {}
@@ -207,7 +212,7 @@ class NottotterApp < Sinatra::Base
       error_message = "投稿に失敗しました。"
       Model.logger.warn "#{error.class}: #{error.message}"
     end
-
+    
     content_type :json
     JSON.unparse({
         :error => error_message,
