@@ -55,6 +55,11 @@ class NottotterApp < Sinatra::Base
       current_user or redirect '/'
     end
 
+    def require_token
+      params[:token] or halt 400, 'token required'
+      params[:token] == current_user.token or halt 400, 'token not match'
+    end
+
     def require_hijack
       expired_hijack and redirect '/timeout'
       current_hijack or redirect '/'
@@ -169,6 +174,7 @@ class NottotterApp < Sinatra::Base
 
   post "/nottori" do
     require_user
+    require_token
     to_user = Model::User.new_from_user_id(params[:user_id])
 
     hijack = current_user.hijack!(to_user)
@@ -194,6 +200,7 @@ class NottotterApp < Sinatra::Base
   
   post "/timeline" do
     require_hijack
+    require_token
     tweet_params = {}
     
     if params[:reply_id]
@@ -231,8 +238,9 @@ class NottotterApp < Sinatra::Base
   end
 
   post "/delete" do
+    require_user
+    require_token
     begin
-      require_user
       halt 400 unless params[:id]
       current_user.delete_status(params[:id])
       "ok"

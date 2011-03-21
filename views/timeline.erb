@@ -1,6 +1,7 @@
 <%= user_style_tag current_hijacked_user %>
 <div class="grid_8">
 <form id="post-tweet">
+  <input type="hidden" name="token" value="<%=h current_user.token %>"></input>
   <input id="post-tweet-reply-id" type="hidden" name="reply_id" value="<%=h params[:reply_id] %>" />
   <textarea id="post-tweet-textarea" name="tweet" cols="50" rows="3"><%=h "@#{params[:reply_user]} " if params[:reply_user] %></textarea>
   <br />

@@ -17,6 +17,7 @@
       <td>
 	<form method="post" action="/nottori">
           <input type="hidden" name="user_id" value="<%= user.user_id %>" />
+          <input type="hidden" name="token" value="<%=h current_user.token %>"></input>
           <input type="submit" value="のっとる" />
 	</form>
       </td>

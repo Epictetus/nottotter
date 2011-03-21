@@ -1,4 +1,4 @@
-window.nottotter = {  };
+if (!window.nottotter) window.nottotter = {  };
 
 window.nottotter.dispatcher = function(guard, func) {
     window.nottotter.dispatcher.path_func = window.nottotter.dispatcher.path_func || []
