@@ -20,7 +20,7 @@ window.nottotter.dispatcher = function(guard, func) {
 
 window.nottotter.timeline = {
     error: function(res) {
-        alert(res.status + ": " + res.responseText);
+        alert(res.responseText);
     },
     init: function() {
         var self = this;

@@ -218,14 +218,10 @@ class NottotterApp < Sinatra::Base
     rescue => error
       error_message = "投稿に失敗しました。"
       Model.logger.warn "#{error.class}: #{error.message}"
+      halt 400, error.message
     end
     
-    content_type :json
-    JSON.unparse({
-        :error => error_message,
-        :remin_seconds => current_hijack.remain_seconds,
-        :timeline => current_hijacked_user.timeline.map{|status| status.to_hash}
-      })
+    erb :get_timeline
   end
 
   get "/timeline.json" do
