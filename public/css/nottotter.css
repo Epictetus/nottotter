@@ -49,6 +49,8 @@ h1 a {
 /* table select user */
 .profile-image {
     vertical-align: middle;
+    width: 48px;
+    height: 48px;
 }
 table.select-user .user:hover {
     background: #fafaff;
