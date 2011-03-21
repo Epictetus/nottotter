@@ -59,7 +59,7 @@ window.nottotter.timeline = {
 	$.ajax({
 		url: '/get_timeline',
 		    type: 'GET',
-		    success: function(res){
+		    success: function(data, type, res){
 		    self.received(res);
 		},
 		    error: function(res) {
@@ -92,13 +92,13 @@ window.nottotter.timeline = {
         self.showIndicator();
         self.lockPostForm();
     },
-    received: function(data) {
-	if(data.status != 200){
+    received: function(res) {
+	if(res.status != 200){
 	    location.href = '/timeout';
 	    return;
 	}
 	var currents = $('.tweet');
-	var updates = $(data).find('.tweet');
+	var updates = $(res.responseText).find('.tweet');
 	var diff = [];
 	$.each(updates, function(index, value){
 		var nid = value.getAttribute('data-value');
