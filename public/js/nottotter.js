@@ -70,25 +70,24 @@ window.nottotter.timeline = {
     hideIndicator: function() {
         $('.indicator').hide();
     },
+    reply: function(id, name) {
+        $('#post-tweet-reply-id').val(id);
+        $('#post-tweet-textarea').html('@' + name + ' ');
+    },
+    deleteTweet:  function(data, id) {
+        tweet = $('.tweet[value=' + id + ']');
+        console.log(tweet);
+
+        $.post(
+	    '/delete', 
+	    { "id": id , "location": location.pathname },
+	    function(res) {
+	        tweet.remove();
+	        return false;
+	    });
+    }
 };
 
-window.nottotter.reply = function(id, name) {
-    $('#post-tweet-reply-id').val(id);
-    $('#post-tweet-textarea').html('@' + name + ' ');
-}
-
-window.nottotter.deleteTweet = function(data, id) {
-    tweet = $('.tweet[value=' + id + ']');
-    console.log(tweet);
-    
-    $.post(
-	'/delete', 
-	{ "id": id , "location": location.pathname },
-	function(res) {
-	    tweet.remove();
-	    return false;
-	});
-}
 
 window.nottotter.dispatcher('/timeline', function() {
     window.nottotter.timeline.init();
