@@ -4,6 +4,15 @@ require 'digest/sha1'
 
 module Model
   class User
+
+    class OAuthRevoked < Exception
+      attr_reader :user
+      def initialize(msg, user = nil)
+        super(msg)
+        @user = user
+      end
+    end
+
     # --- class method ---
     
     def self.all
@@ -106,6 +115,12 @@ module Model
     end
 
     # --- twitter ---
+
+    def verify_credentials
+      @verify_credentials ||= self.rubytter.verify_credentials
+    rescue => error
+      raise Model::User::OAuthRevoked.new(error.message, self)
+    end
 
     def rubytter                # returns rubytter instance
       return @rubytter if @rubytter

@@ -74,6 +74,14 @@ window.nottotter.countdown = {
 window.nottotter.timeline = {
     error: function(res) {
         if (res.status == 0) return;
+        if (res.status == 401) {
+            if (res.responseText == window.nottotter.user.screen_name) {
+                location.href = "/revoked";
+            } else {
+                location.href = "/nottori/" + res.responseText;
+            }
+            return;
+        }
         alert(res.responseText);
     },
     init: function() {

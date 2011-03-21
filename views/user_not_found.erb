@@ -1,11 +1,11 @@
-<p><%=h @not_found_to_user %>さんはのっとったーを利用していないようです．ぜひ招待状を送りましょう．</p>
+<p><%=h @not_found_to_user %>さんはのっとったーを利用していないか，もしくは，OAuthの認証が切れたようです．ぜひ招待状を送りましょう．</p>
 <script src="http://platform.twitter.com/anywhere.js?id=GVamhTV31yI1GGAXxaFQ2w&v=1" type="text/javascript"></script>
 <script>
   twttr.anywhere(function (T) {
     T("#tweet-box").tweetBox({
       height: 100,
       width: 600,
-      defaultContent: "@<%=h @not_found_to_user %>さんこんにちは，のっとったーのご紹介です． http://nottotter.com"
+      defaultContent: "@<%=h @not_found_to_user %>さんこんにちは，のっとったーのご紹介です． http://nottotter.jp"
     });
   });
 </script>

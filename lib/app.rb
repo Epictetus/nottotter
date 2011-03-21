@@ -58,6 +58,7 @@ class NottotterApp < Sinatra::Base
 
     def require_user
       current_user or redirect '/'
+      current_user.verify_credentials
     end
 
     def require_token
@@ -68,11 +69,12 @@ class NottotterApp < Sinatra::Base
     def require_hijack
       expired_hijack and redirect '/timeout'
       current_hijack or redirect '/'
+      current_hijack.verify_credentials
     end
 
     def current_user
-      return unless session[:user_id]
       return @current_user if defined? @current_user
+      return unless session[:user_id]
 
       @current_user = Model::User.new_from_user_id(session[:user_id])
     end
@@ -93,6 +95,7 @@ class NottotterApp < Sinatra::Base
 
     def require_expired_hijack
       expired_hijack or redirect '/'
+      expired_hijack.verify_credentials
     end
 
     def expired_hijack
@@ -102,6 +105,27 @@ class NottotterApp < Sinatra::Base
       @expired_hijack = current_user.expired_hijack
     end
 
+  end
+
+  set :show_exceptions, false
+
+  error Model::User::OAuthRevoked do
+    error = request.env['sinatra.error']
+
+    session.delete(:user_id) if error.user.screen_name == current_user.screen_name
+
+    halt 401, error.user.screen_name if request.xhr?
+
+    if error.user.screen_name == current_user.screen_name
+      redirect "/revoked"
+    else
+      redirect "/nottori/#{error.user.screen_name}"
+    end
+  end
+
+  error do
+    status 500
+    'sorry... ' + request.env['sinatra.error'].message
   end
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
@@ -131,7 +155,7 @@ class NottotterApp < Sinatra::Base
         :oauth_verifier => params[:oauth_verifier])
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
-      halt 401
+      halt 400
     end
     session.delete(:request_token)
     session.delete(:request_secret)
@@ -153,7 +177,11 @@ class NottotterApp < Sinatra::Base
     end
     
     session[:user_id] = access_token.params[:user_id]
-    redirect '/nottori'
+    redirect current_hijack ? '/timeline' : '/nottori'
+  end
+
+  get '/revoked' do
+    erb :revoked
   end
 
   get '/logout' do
@@ -172,11 +200,7 @@ class NottotterApp < Sinatra::Base
     'OK'
   end
 
-  get"/nottori/" do
-    redirect "/nottori"
-  end
-
-  get "/nottori" do
+  get "/nottori/?" do
     require_user
     @users = Model::User.recommends(current_user)
     erb :nottori
@@ -233,15 +257,6 @@ class NottotterApp < Sinatra::Base
     end
     
     erb :get_timeline
-  end
-
-  get "/timeline.json" do
-    current_hijack or halt 401, "Unauthorized"
-    content_type :json
-    JSON.unparse({
-        :remin_seconds => current_hijack.remain_seconds,
-        :timeline => current_hijacked_user.timeline.map{|status| status.to_hash}
-      })
   end
 
   get "/history" do

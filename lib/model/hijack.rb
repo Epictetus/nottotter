@@ -102,6 +102,11 @@ module Model
 
     # --- instance method ---
 
+    def verify_credentials
+      from_user.verify_credentials
+      to_user.verify_credentials
+    end
+
     # --- attributes ---
 
     def _id
