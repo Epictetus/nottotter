@@ -90,7 +90,7 @@ window.nottotter.timeline = {
         $('#post-tweet-textarea').text('@' + name + ' ').focus();
     },
     deleteTweet:  function(id) {
-        var tweet = $('.tweet[value=' + id + ']');
+        var tweet = $('.tweet[data-value=' + id + ']');
 
         $.post(
 	    '/delete', 
