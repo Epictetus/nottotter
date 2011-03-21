@@ -227,7 +227,7 @@ module Model
     end
 
     def notice_close
-      [Model::User::ADMIN_USER, to_user].each{|user|
+      [Model::User::ADMIN_USER, to_user].select{|user| user.open? }.each{|user|
         user.tweet "@#{from_user.screen_name} さんによる @#{to_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
       }
     rescue => error
