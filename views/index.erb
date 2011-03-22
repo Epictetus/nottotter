@@ -22,7 +22,9 @@
   <% end %>  
   <br />
   <div class="service-status">
-    <p>現在<strong><%= h  Model::User.all.length %></strong>人のユーザーがのっとったーを利用しています.<br />合計<strong><%= h Model::Hijack.history.length %></strong>回の乗っ取りが行われました.</p>
+    <p>現在<strong><%= h  Model::User.all.length %></strong>人のユーザーがのっとったーを利用しています.<br />
+      <!-- 合計<strong><%= h Model::Hijack.history.length %></strong>回の乗っ取りが行われました.-->
+    </p>
   </div>
   <div class="howtouse">
     <h4>使い方</h4>
