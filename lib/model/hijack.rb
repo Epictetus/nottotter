@@ -220,7 +220,7 @@ module Model
     def notice_start_dm
       to_user.send_direct_message(
         :user => to_user.user_id,
-        :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{from_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.jp/nottori/#{to_user.screen_name} #{Model::AAMaker.make}"
+        :text => "【緊急】@#{to_user.screen_name}さんのTwitterアカウントが@#{from_user.screen_name}さんに乗っ取られました.  こちらのURLより乗っ取り返しましょう. http://nottotter.jp/nottori/#{from_user.screen_name} #{Model::AAMaker.make}"
         )
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
