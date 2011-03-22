@@ -175,11 +175,6 @@ module Model
       end
     end
 
-    def delete_profile
-      Model::Cache.delete("profile-#{self.user_id}")
-      @profile = nil
-    end
-
     def profile
       @profile ||= Model::Cache.get_or_set("profile-#{self.user_id}") {
         Model.logger.info "get user profile #{self.screen_name}"
@@ -260,6 +255,17 @@ module Model
     
     def profile_link_color
       "##{self.profile[:profile_link_color]}"
+    end
+
+    def delete_cache
+      Model::Cache.delete("profile-#{self.user_id}")
+      @profile = nil
+      Model::Cache.delete("friend_ids-#{self.user_id}")
+      @friends_ids = nil
+      Model::Cache.delete("followers_ids-#{self.user_id}")
+      @follower_ids = nil
+      Model::Cache.delete("blocking_ids-#{self.user_id}")
+      @blocking_ids = nil
     end
 
     def friends_ids

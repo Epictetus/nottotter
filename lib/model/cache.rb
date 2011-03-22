@@ -30,7 +30,7 @@ module Model
     end
 
     def self.delete(key)
-      Model.logger.info "delete key #{key}"
+      Model.logger.info "delete memcache key #{key}"
       self.instance.delete(key)
     end
   end

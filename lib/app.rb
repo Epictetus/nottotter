@@ -184,7 +184,7 @@ class NottotterApp < Sinatra::Base
       user.update_admin
     end
 
-    user.delete_profile
+    user.delete_cache
 
     if user.profile[:protected]
       Model::User.remove(user) unless user.admin_user?
