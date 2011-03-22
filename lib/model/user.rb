@@ -58,6 +58,10 @@ module Model
       self.collection.remove({:user_id => user.user_id})
     end
 
+    def self.count
+      self.collection.find({:open => true}).count
+    end
+    
     def initialize(data)        # private
       @data = data
     end

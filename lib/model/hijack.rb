@@ -73,6 +73,10 @@ module Model
 
     end
 
+    def self.count
+      self.collection.find.count
+    end
+
     def initialize(data)        # private
       @data = data
     end
@@ -117,7 +121,7 @@ module Model
     def key
       @data['_id'].to_s
     end
-
+    
     def from_user
       Model::User.new_from_user_id(@data['from_user_id'])
     end
