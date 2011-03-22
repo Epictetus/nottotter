@@ -261,7 +261,7 @@ class NottotterApp < Sinatra::Base
     error_message = false
 
     begin
-      tweet = paramas[:tweet]
+      tweet = params[:tweet]
       raise if tweet =~ /^d\s/i
       raise if tweet =~ /^set\slocation\s/i
       tweet = params[:tweet].gsub(/^[dD] /, "")
