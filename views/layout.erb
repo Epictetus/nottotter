@@ -25,11 +25,25 @@
           token: "<%=h current_user.token %>"
         };
       </script>
-      <div class="grid_4">
+      <div class="grid_4 top-navigation">
         <p>
           <%=h current_user.screen_name %>さんこんにちは，
           <a href="/logout">ログアウト</a>
           しますか？
+
+          <form id="setting" method="POST" action="/setting">
+            <label>
+              <input type="radio" name="allow_from" value="followers" <% unless current_user.allow_from_all %>checked="checked"<% end %> >
+              友達からのっとり許可
+            </label>
+            <br>
+            <label>
+              <input type="radio" name="allow_from" value="all" <% if current_user.allow_from_all %>checked="checked"<% end %>/>
+              全員からのっとり許可
+            </label>
+            <br>
+            <input type="submit" value="設定を保存" />
+          </form>
         </p>
       </div>
       <% end %>

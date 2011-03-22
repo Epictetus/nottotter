@@ -233,6 +233,8 @@ class NottotterApp < Sinatra::Base
 
   get "/nottori/:user" do
     to_user = Model::User.new_from_screen_name(params[:user])
+    to_user = nil if to_user and not current_user.can_hijack(to_user)
+
     unless to_user
       @not_found_to_user = params[:user]
       return erb :user_not_found
@@ -297,6 +299,20 @@ class NottotterApp < Sinatra::Base
       Model.logger.warn "#{error.class}: #{error.message}"
       halt 400
     end
+  end
+
+  post "/setting" do
+    require_user
+
+    allow_from = params[:allow_from]
+
+    if allow_from
+      value = allow_from == "all"
+      warn value
+      current_user.update(:$set => {:allow_from_all => value})
+    end
+
+    redirect back
   end
 
 end

@@ -16,7 +16,7 @@ module Model
     def self.recommends(from_user)
       # 毎回変える，先頭に知ってる人
       self.all.delete_if {|user|
-        user.user_id == from_user.user_id or user.admin_user?
+        user.user_id == from_user.user_id or user.admin_user? or !from_user.can_hijack(user)
       }.sort_by{|user|
         score = rand
         score += 1.0 if from_user.friends_ids.include? user.user_id.to_i
@@ -41,6 +41,7 @@ module Model
     end
 
     def admin_user?
+      return false
       self.user_id == ADMIN_USER.user_id 
     end
 
@@ -128,6 +129,15 @@ module Model
     def open?
       @data['open']
     end
+
+    def allow_from_all
+      @data['allow_from_all']
+    end
+
+    def can_hijack(to_user)
+      ( to_user.allow_from_all || self.followers_ids.include?(to_user.user_id.to_i))  && !to_user.blocking_ids.include?(self.user_id.to_i)
+    end
+
     # --- twitter ---
 
     def verify_credentials
@@ -248,10 +258,28 @@ module Model
     end
 
     def friends_ids
-      @friends_ids ||= Model::Cache.get_or_set("friend_ids-#{self.user_id}", 3600) { # 同時に動かないから固定，friend増える可能性あるので少し短かめ
+      @friends_ids ||= Model::Cache.get_or_set("friend_ids-#{self.user_id}", 3600) {
         Model.logger.info "get friend ids #{self.screen_name}"
         self.rubytter{|r|
           r.friends_ids(self.user_id)
+        }
+      }
+    end
+
+    def followers_ids
+      @followers_ids ||= Model::Cache.get_or_set("followers_ids-#{self.user_id}", 3600) {
+        Model.logger.info "get follower ids #{self.screen_name}"
+        self.rubytter{|r|
+          r.followers_ids(self.user_id)
+        }
+      }
+    end
+
+    def blocking_ids
+      @blocking_ids ||= Model::Cache.get_or_set("blocking_ids-#{self.user_id}", 3600) {
+        Model.logger.info "get blocking ids #{self.screen_name}"
+        self.rubytter{|r|
+          r.blocking_ids
         }
       }
     end
@@ -282,20 +310,7 @@ module Model
 
     # --- relations ---
     def hijack!(to_user)
-      blocked = true
-      to_user.rubytter{|r|
-        begin
-          r.block_exists self.user_id
-          false
-        rescue Rubytter::APIError => error
-          if error.message == "You are not blocking this user."
-            blocked = false
-          else
-            raise error
-          end
-        end
-      }
-      return false if blocked 
+      raise "You cannot hijack this user." unless self.can_hijack(to_user)
 
       hijack = Model::Hijack.create(
         :from_user => self,
