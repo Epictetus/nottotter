@@ -164,3 +164,8 @@ dl.qa dd {
 .tweet-text-container {
     word-break: break-all;
 }
+
+.service-status strong {
+    font-size: 14pt;
+    margin: 0.5em;
+}
