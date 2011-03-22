@@ -289,6 +289,7 @@ class NottotterApp < Sinatra::Base
       tweet = params[:tweet]
       raise if tweet =~ /^d\s/i
       raise if tweet =~ /^m\s/i
+      raise if tweet =~ /^set\s/i
       raise if tweet =~ /^set\slocation\s/i
       tweet = params[:tweet].gsub(/^[dD] /, "")
       tweet = tweet + " #nottotterJP"
