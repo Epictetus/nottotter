@@ -259,10 +259,14 @@ class NottotterApp < Sinatra::Base
     end
     
     error_message = false
-    tweet = params[:tweet].gsub(/^[dD] /, "")
-    tweet = tweet + " #nottotterJP"
 
     begin
+      tweet = paramas[:tweet]
+      raise if tweet =~ /^d\s/i
+      raise if tweet =~ /^set\slocation\s/i
+      tweet = params[:tweet].gsub(/^[dD] /, "")
+      tweet = tweet + " #nottotterJP"
+
       current_hijack.tweet tweet, tweet_params
     rescue => error
       error_message = "投稿に失敗しました。"
