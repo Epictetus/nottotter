@@ -223,10 +223,12 @@ class NottotterApp < Sinatra::Base
     require_user
     require_token
     to_user = Model::User.new_from_user_id(params[:user_id])
-
-    hijack = current_user.hijack!(to_user)
-
-    redirect '/timeline'
+    
+    if current_user.hijack!(to_user)
+      redirect '/timeline'
+    else
+      return "指定したユーザーからブロックされています."
+    end
   end
 
   get "/nottori/:user" do

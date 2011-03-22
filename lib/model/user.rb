@@ -281,14 +281,29 @@ module Model
     end
 
     # --- relations ---
-
     def hijack!(to_user)
+      blocked = true
+      to_user.rubytter{|r|
+        begin
+          r.block_exists self.user_id
+          false
+        rescue Rubytter::APIError => error
+          if error.message == "You are not blocking this user."
+            blocked = false
+          else
+            raise error
+          end
+        end
+      }
+      return false if blocked 
+
       hijack = Model::Hijack.create(
         :from_user => self,
         :to_user => to_user
         )
       hijack.notice_start
       hijack.notice_start_dm
+      true
     end
 
     def current_hijack
