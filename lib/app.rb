@@ -178,10 +178,13 @@ class NottotterApp < Sinatra::Base
         :screen_name => access_token.params[:screen_name],
         :open => true
       })
+
     
     if user.admin_user?
       user.update_admin
     end
+
+    user.delete_profile
 
     if user.profile[:protected]
       Model::User.remove(user) unless user.admin_user?

@@ -28,5 +28,10 @@ module Model
       self.instance.set(key, value, expire)
       value
     end
+
+    def self.delete(key)
+      Model.logger.info "delete key #{key}"
+      self.instance.delete(key)
+    end
   end
 end

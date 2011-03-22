@@ -175,6 +175,11 @@ module Model
       end
     end
 
+    def delete_profile
+      Model::Cache.delete("profile-#{self.user_id}")
+      @profile = nil
+    end
+
     def profile
       @profile ||= Model::Cache.get_or_set("profile-#{self.user_id}") {
         Model.logger.info "get user profile #{self.screen_name}"
