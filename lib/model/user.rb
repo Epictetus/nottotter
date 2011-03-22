@@ -59,7 +59,9 @@ module Model
     end
 
     def self.count
-      self.collection.find({:open => true}).count
+      Model::Cache.get_or_set("user-count", 600){
+        self.collection.find({:open => true}).count
+      }
     end
     
     def initialize(data)        # private

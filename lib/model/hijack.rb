@@ -74,7 +74,9 @@ module Model
     end
 
     def self.count
-      self.collection.find.count
+      Model::Cache.get_or_set("hijack-count", 600){
+        self.collection.find.count
+      }
     end
 
     def initialize(data)        # private
