@@ -304,6 +304,7 @@ class NottotterApp < Sinatra::Base
 
   post "/setting" do
     require_user
+    require_token
 
     allow_from = params[:allow_from]
 

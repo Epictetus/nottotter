@@ -32,6 +32,7 @@
           しますか？
 
           <form id="setting" method="POST" action="/setting">
+            <input type="hidden" name="token" value="<%=h current_user.token %>"></input>
             <label>
               <input type="radio" name="allow_from" value="followers" <% unless current_user.allow_from_all %>checked="checked"<% end %> >
               友達からのっとり許可
