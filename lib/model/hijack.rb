@@ -215,7 +215,7 @@ module Model
       end
 
       [to_user].each{|user|
-        user.tweet "@#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました. (#{status}) #nottotterJP"
+        user.tweet "【のっとったー】 @#{from_user.screen_name} さんが @#{to_user.screen_name} さんを乗っ取りました. (#{status}) #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
@@ -232,7 +232,7 @@ module Model
 
     def notice_close
       [to_user].select{|user| user.open? }.each{|user|
-        user.tweet "@#{from_user.screen_name} さんによる @#{to_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
+        user.tweet "【のっとったー】 @#{from_user.screen_name} さんによる @#{to_user.screen_name} さんの乗っ取りが終了しました. #{Model::AAMaker.make} #nottotterJP"
       }
     rescue => error
       Model.logger.warn "#{error.class}: #{error.message}"
