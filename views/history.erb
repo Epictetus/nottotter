@@ -2,7 +2,7 @@
 <div class="grid_8">
   <% @history.each do |hijack| %>
     <div class="hijack-item">
-      <div><%=h ymd(hijack.start_on) %>，<%=h hijack.avail_tweets.length %>回投稿．</div>
+      <div><%=h dt_to_duration(hijack.start_on) %>，<%=h hijack.avail_tweets.length %>回投稿．</div>
       <% hijack.avail_tweets.each do |status| %>
         <%= tweet_tag status, "history", hijack.from_user %>
       <% end %>

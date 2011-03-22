@@ -32,6 +32,22 @@ class NottotterApp < Sinatra::Base
     def ymd(time)
       time.strftime('%Y年%m月%d日')
     end
+
+    def dt_to_duration(time)
+      seconds = (Time.now - time).to_i
+      if seconds < 60
+        "#{seconds}秒前"
+      elsif seconds < 60 * 60
+        minutes = seconds / 60
+        "#{minutes}分前"
+      elsif seconds < 60 * 60 * 24
+        hours = seconds / (60 * 60)
+        "#{hours}時間前"
+      else
+        days = seconds / (60 * 60 * 24)
+        "#{days}日前"
+      end
+    end
     
     def icon_list_tag(users, count = 7)
       erb :icon_list, :locals => {:users => users , :count => count}
