@@ -251,6 +251,7 @@ class NottotterApp < Sinatra::Base
   end
 
   get "/nottori/:user" do
+    require_user 
     to_user = Model::User.new_from_screen_name(params[:user])
     to_user = nil if to_user and not current_user.can_hijack(to_user)
     to_user = nil if to_user and to_user.blocking_ids.include?(current_user.user_id.to_i)
