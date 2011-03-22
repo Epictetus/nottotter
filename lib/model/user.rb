@@ -135,7 +135,7 @@ module Model
     end
 
     def can_hijack(to_user)
-      ( to_user.allow_from_all || self.followers_ids.include?(to_user.user_id.to_i))
+      self.user_id == to_user.user_id || to_user.allow_from_all || self.followers_ids.include?(to_user.user_id.to_i)
     end
 
     # --- twitter ---
