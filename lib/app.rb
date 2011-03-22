@@ -197,6 +197,7 @@ class NottotterApp < Sinatra::Base
   end
 
   get '/logout' do
+    current_hijack and current_hijack.close!
     session.delete(:user_id)
     redirect '/'
   end
