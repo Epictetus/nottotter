@@ -135,7 +135,7 @@ module Model
     end
 
     def can_hijack(to_user)
-      ( to_user.allow_from_all || self.followers_ids.include?(to_user.user_id.to_i))  && !to_user.blocking_ids.include?(self.user_id.to_i)
+      ( to_user.allow_from_all || self.followers_ids.include?(to_user.user_id.to_i))
     end
 
     # --- twitter ---
@@ -310,7 +310,7 @@ module Model
 
     # --- relations ---
     def hijack!(to_user)
-      raise "You cannot hijack this user." unless self.can_hijack(to_user)
+      raise "You cannot hijack this user." unless self.can_hijack(to_user) && !to_user.blocking_ids.include?(self.user_id.to_i)
 
       hijack = Model::Hijack.create(
         :from_user => self,
