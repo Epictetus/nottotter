@@ -157,191 +157,185 @@ class NottotterApp < Sinatra::Base
 
   use Rack::Session::Cookie, :secret => Model::Twitter::CONSUMER_KEY
 
-
   get '/' do
-    session.delete(:user_id)
-    erb :x
+    redirect '/timeline' if current_hijack
+    erb :index
   end
 
-  # get '/' do
-  #   redirect '/timeline' if current_hijack
-  #   erb :index
-  # end
+  get '/oauth' do
+    request_token = Model::Twitter.get_request_token()
+    session[:request_token] = request_token.token
+    session[:request_secret] = request_token.secret
+    redirect request_token.authorize_url
+  end
 
-  # get '/oauth' do
-  #   request_token = Model::Twitter.get_request_token()
-  #   session[:request_token] = request_token.token
-  #   session[:request_secret] = request_token.secret
-  #   redirect request_token.authorize_url
-  # end
-
-  # get '/callback' do
-  #   request_token = Model::Twitter.request_token(
-  #     session[:request_token],
-  #     session[:request_secret]
-  #     )
+  get '/callback' do
+    request_token = Model::Twitter.request_token(
+      session[:request_token],
+      session[:request_secret]
+      )
     
-  #   begin
-  #     access_token = request_token.get_access_token(
-  #       {},
-  #       :oauth_token => params[:oauth_token],
-  #       :oauth_verifier => params[:oauth_verifier])
-  #   rescue => error
-  #     Model.logger.warn "#{error.class}: #{error.message}"
-  #     halt 400
-  #   end
-  #   session.delete(:request_token)
-  #   session.delete(:request_secret)
+    begin
+      access_token = request_token.get_access_token(
+        {},
+        :oauth_token => params[:oauth_token],
+        :oauth_verifier => params[:oauth_verifier])
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
+      halt 400
+    end
+    session.delete(:request_token)
+    session.delete(:request_secret)
     
-  #   user = Model::User.register({
-  #       :user_id => access_token.params[:user_id],
-  #       :access_token => access_token.params[:oauth_token],
-  #       :access_secret => access_token.params[:oauth_token_secret],
-  #       :screen_name => access_token.params[:screen_name],
-  #       :open => true
-  #     })
+    user = Model::User.register({
+        :user_id => access_token.params[:user_id],
+        :access_token => access_token.params[:oauth_token],
+        :access_secret => access_token.params[:oauth_token_secret],
+        :screen_name => access_token.params[:screen_name],
+        :open => true
+      })
 
     
-  #   if user.admin_user?
-  #     user.update_admin
-  #   end
+    if user.admin_user?
+      user.update_admin
+    end
 
-  #   user.delete_cache
+    user.delete_cache
 
-  #   if user.profile[:protected]
-  #     Model::User.remove(user) unless user.admin_user?
-  #     return erb :user_protected
-  #   end
+    if user.profile[:protected]
+      Model::User.remove(user) unless user.admin_user?
+      return erb :user_protected
+    end
     
-  #   session[:user_id] = access_token.params[:user_id]
-  #   redirect current_hijack ? '/timeline' : '/nottori'
-  # end
+    session[:user_id] = access_token.params[:user_id]
+    redirect current_hijack ? '/timeline' : '/nottori'
+  end
 
-  # get '/revoked' do
-  #   erb :revoked
-  # end
+  get '/revoked' do
+    erb :revoked
+  end
 
-  # get '/logout' do
-  #   current_hijack and current_hijack.close!
-  #   session.delete(:user_id)
-  #   redirect '/'
-  # end
+  get '/logout' do
+    current_hijack and current_hijack.close!
+    session.delete(:user_id)
+    redirect '/'
+  end
 
-  # get '/timeout' do
-  #   erb :timeout
-  # end
+  get '/timeout' do
+    erb :timeout
+  end
 
-  # post '/timeout' do
-  #   hijack = current_hijack || expired_hijack
-  #   hijack or halt 400
-  #   hijack.close!
-  #   'OK'
-  # end
+  post '/timeout' do
+    hijack = current_hijack || expired_hijack
+    hijack or halt 400
+    hijack.close!
+    'OK'
+  end
 
-  # get "/nottori/?" do
-  #   require_user
-  #   @users = Model::User.recommends(current_user)
-  #   erb :nottori
-  # end
+  get "/nottori/?" do
+    require_user
+    @users = Model::User.recommends(current_user)
+    erb :nottori
+  end
 
-  # post "/nottori" do
-  #   require_user
-  #   require_token
-  #   to_user = Model::User.new_from_user_id(params[:user_id])
+  post "/nottori" do
+    require_user
+    require_token
+    to_user = Model::User.new_from_user_id(params[:user_id])
     
-  #   if current_user.hijack!(to_user)
-  #     redirect '/timeline'
-  #   else
-  #     return "指定したユーザーからブロックされています."
-  #   end
-  # end
+    if current_user.hijack!(to_user)
+      redirect '/timeline'
+    else
+      return "指定したユーザーからブロックされています."
+    end
+  end
 
-  # get "/nottori/:user" do
-  #   require_user 
-  #   to_user = Model::User.new_from_screen_name(params[:user])
-  #   to_user = nil if to_user and not current_user.can_hijack(to_user)
-  #   to_user = nil if to_user and to_user.blocking_ids.include?(current_user.user_id.to_i)
+  get "/nottori/:user" do
+    require_user 
+    to_user = Model::User.new_from_screen_name(params[:user])
+    to_user = nil if to_user and not current_user.can_hijack(to_user)
+    to_user = nil if to_user and to_user.blocking_ids.include?(current_user.user_id.to_i)
 
-  #   unless to_user
-  #     @not_found_to_user = params[:user]
-  #     return erb :user_not_found
-  #   end
-  #   @users = [to_user]
-  #   erb :nottori
-  # end
+    unless to_user
+      @not_found_to_user = params[:user]
+      return erb :user_not_found
+    end
+    @users = [to_user]
+    erb :nottori
+  end
 
-  # get "/timeline" do
-  #   require_hijack
-  #   @timeline = current_hijacked_user.timeline
-  #   erb :timeline
-  # end
+  get "/timeline" do
+    require_hijack
+    @timeline = current_hijacked_user.timeline
+    erb :timeline
+  end
   
-  # get "/get_timeline" do
-  #   require_hijack
-  #   erb :get_timeline
-  # end
+  get "/get_timeline" do
+    require_hijack
+    erb :get_timeline
+  end
 
-  # post "/timeline" do
-  #   require_hijack
-  #   require_token
-  #   tweet_params = {}
+  post "/timeline" do
+    require_hijack
+    require_token
+    tweet_params = {}
     
-  #   if params[:reply_id]
-  #     tweet_params[:in_reply_to_status_id] = params[:reply_id]
-  #   end
+    if params[:reply_id]
+      tweet_params[:in_reply_to_status_id] = params[:reply_id]
+    end
     
-  #   error_message = false
+    error_message = false
 
-  #   begin
-  #     tweet = params[:tweet]
-  #     raise if tweet =~ /^d\s/i
-  #     raise if tweet =~ /^m\s/i
-  #     raise if tweet =~ /^set\s/i
-  #     raise if tweet =~ /^set\slocation\s/i
-  #     tweet = params[:tweet].gsub(/^[dD] /, "")
-  #     tweet = tweet + " #nottotterJP"
+    begin
+      tweet = params[:tweet]
+      raise if tweet =~ /^d\s/i
+      raise if tweet =~ /^m\s/i
+      raise if tweet =~ /^set\s/i
+      raise if tweet =~ /^set\slocation\s/i
+      tweet = params[:tweet].gsub(/^[dD] /, "")
+      tweet = tweet + " #nottotterJP"
 
-  #     current_hijack.tweet tweet, tweet_params
-  #   rescue => error
-  #     error_message = "投稿に失敗しました。"
-  #     Model.logger.warn "#{error.class}: #{error.message}"
-  #     halt 400, error.message
-  #   end
+      current_hijack.tweet tweet, tweet_params
+    rescue => error
+      error_message = "投稿に失敗しました。"
+      Model.logger.warn "#{error.class}: #{error.message}"
+      halt 400, error.message
+    end
     
-  #   erb :get_timeline
-  # end
+    erb :get_timeline
+  end
 
-  # get "/history" do
-  #   @history = Model::Hijack.history.select{ |h| h.avail_tweets.length > 0 }
-  #   erb :history
-  # end
+  get "/history" do
+    @history = Model::Hijack.history.select{ |h| h.avail_tweets.length > 0 }
+    erb :history
+  end
 
-  # post "/delete" do
-  #   require_user
-  #   require_token
-  #   begin
-  #     halt 400 unless params[:id]
-  #     current_user.delete_status(params[:id])
-  #     "ok"
-  #   rescue => error
-  #     Model.logger.warn "#{error.class}: #{error.message}"
-  #     halt 400
-  #   end
-  # end
+  post "/delete" do
+    require_user
+    require_token
+    begin
+      halt 400 unless params[:id]
+      current_user.delete_status(params[:id])
+      "ok"
+    rescue => error
+      Model.logger.warn "#{error.class}: #{error.message}"
+      halt 400
+    end
+  end
 
-  # post "/setting" do
-  #   require_user
-  #   require_token
+  post "/setting" do
+    require_user
+    require_token
 
-  #   allow_from = params[:allow_from]
+    allow_from = params[:allow_from]
 
-  #   if allow_from
-  #     value = allow_from == "all"
-  #     warn value
-  #     current_user.update(:$set => {:allow_from_all => value})
-  #   end
+    if allow_from
+      value = allow_from == "all"
+      warn value
+      current_user.update(:$set => {:allow_from_all => value})
+    end
 
-  #   redirect back
-  # end
+    redirect back
+  end
 
 end
