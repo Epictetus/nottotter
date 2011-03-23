@@ -17,37 +17,7 @@
   <body>
     <div id="contain-all" class="container_12">
       <h1 class="grid_8"><a href="/">のっとったー</a></h1>
-      <% if current_user %>
-      <script language="javascript" type="text/javascript" >
-        if (!window.nottotter) window.nottotter = {  };
-        window.nottotter.user = {
-          screen_name: "<%=h current_user.screen_name %>",
-          token: "<%=h current_user.token %>"
-        };
-      </script>
-      <div class="grid_4 top-navigation">
-        <p>
-          <%=h current_user.screen_name %>さんこんにちは，
-          <a href="/logout">ログアウト</a>
-          しますか？
 
-          <form id="setting" method="POST" action="/setting">
-            <input type="hidden" name="token" value="<%=h current_user.token %>"></input>
-            <label>
-              <input type="radio" name="allow_from" value="followers" <% unless current_user.allow_from_all %>checked="checked"<% end %> >
-              友達からのっとり許可
-            </label>
-            <br>
-            <label>
-              <input type="radio" name="allow_from" value="all" <% if current_user.allow_from_all %>checked="checked"<% end %>/>
-              全員からのっとり許可
-            </label>
-            <br>
-            <input type="submit" value="設定を保存" />
-          </form>
-        </p>
-      </div>
-      <% end %>
       <div class="clear"></div>
       <%= yield %>
 
